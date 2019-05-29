@@ -4,13 +4,13 @@
 //
 
 #include <iostream>
-#include "SDLEvent.h"
 #include "renderer/SDLScreen.h"
+#include "renderer/TextureBuffer.h"
+#include "loaders/Map.h"
+#include "SDLEvent.h"
 #include "Debug.h"
 #include "Game.h"
 #include "Config.h"
-#include "renderer/TextureBuffer.h"
-#include "loaders/Map.h"
 
 using namespace std;
 
@@ -19,15 +19,23 @@ using namespace std;
 SDLEvent *SDLevent;
 SDLScreen *SDLscreen;
 
- 
 
-int WinMain(      
-    HINSTANCE hInstance,
-    HINSTANCE hPrevInstance,
-    LPSTR lpCmdLine,
-    int nCmdShow
-)
+// Workaround to make the linked SDL dll work, since it was compiled with an old MSVC version,
+//  which had a different internal implementation to retrieve stdin, stdout, stderr
+#ifdef _MSC_VER
+    FILE _iob[] = {*stdin, *stdout, *stderr};
+    extern "C" FILE * __cdecl __iob_func(void)
+    {
+        return _iob;
+    }
+#endif
+
+
+extern "C" // needed by SDL
+int main(int argc, char *argv[])
 {
+  printf("(Re)MapRenderer v1.0 (%u bits build).\n", (sizeof(void*) * 4));
+
 
   if(!nConfig::Init()) {
     pDebug.Log("Unable to load configuration file - Using defaults ", __FILE__, __LINE__,
@@ -92,12 +100,11 @@ int WinMain(
 
   printf("Rendering Area (%i/%i) to (%i/%i)\n", nConfig::minx, nConfig::miny, nConfig::maxx, nConfig::maxy);
   
-  int bxcount = t_width / 1024;
-  int bycount = t_height / 1024;
+  const int bxcount = t_width / 1024;
+  const int bycount = t_height / 1024;
+  const int bcount = (bxcount + 1) * (bycount + 1);
   
-  int size = 1024 / divisor;
-  
-  printf("Rendering %i blocks ", (bxcount + 1) * (bycount + 1));
+  const int size = 1024 / divisor;
   
   int idx = 0;
 
@@ -105,7 +112,7 @@ int WinMain(
      for (int blockx = 0; blockx <= bxcount; blockx ++) {
        int xcount = size; if (blockx == bxcount) xcount = (t_width % 1024) / divisor;
        int ycount = size; if (blocky == bycount) ycount = (t_height % 1024) / divisor;
-       printf("...%i", idx); 
+       printf("\rRendering block %i/%i", idx, bcount);
        SDL_FillRect(SDLscreen->screen, NULL, 0);
        pGame.GetRenderer()->Rebuild(- blockx * 1024,- blocky * 1024);
        
@@ -153,7 +160,7 @@ int WinMain(
               
        idx++;
   }
-  printf("...done\n");
+  printf(" -> done\n");
    delete file;
    free(data);
 

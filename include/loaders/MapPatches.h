@@ -23,7 +23,7 @@
 #ifndef _MAPPATCHES_H_
 #define _MAPPATCHES_H_
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 

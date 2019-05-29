@@ -3,6 +3,8 @@
 // Created by: Alexander Oster - tensor@ultima-iris.de
 //
 
+#ifdef COMPILE_INCOMPLETE_CODE
+
 #include <iostream>
 #include <math.h>
 #include "renderer/Camera.h"
@@ -260,10 +262,12 @@ void Camera::CreatePickRay(int mousex, int mousey, float vecPickRayOrigin[3], fl
 	vecPickRayOrigin[0]=matrix[12];
 	vecPickRayOrigin[1]=matrix[13];
 	vecPickRayOrigin[2]=matrix[14];
-	for(int i=0; i<3; i++) vecPickRayDir[i]-=vecPickRayOrigin[i];
+    int i;
+	for(i=0; i<3; i++) vecPickRayDir[i]-=vecPickRayOrigin[i];
 	NormalizeVector(vecPickRayDir);
 
 // PickRay Intersection with NearPlane is the Origin of the PickRay
 	for(i=0; i<3; i++) vecPickRayOrigin[i]+=vecPickRayDir[i]*0.2f; // 0.2f = NEAR_Z
 }
 
+#endif // COMPILE_INCOMPLETE_CODE

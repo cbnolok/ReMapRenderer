@@ -289,6 +289,7 @@ int Renderer::RenderScene(void)
 	
 	  
   return SDLscreen->DrawGL(); */
+    return false;
 }
 
 void Renderer::RebuildPartX(int dir) {
@@ -473,6 +474,7 @@ int Renderer::GetRoofHeight()
 	}
 	
 	return ROOF_NONE; */
+    return ROOF_NONE; // NOTE: INCOMPLETE CODE!
 }
 
 
@@ -492,7 +494,8 @@ void Renderer::RecalcHeight()
   outbox.w = 0;
   outbox.h = 0;
 
-  	for (int x = nConfig::minblockx; x <= nConfig::maxblockx; x++) 
+  printf("Caching UO data...\n");
+  for (int x = nConfig::minblockx; x <= nConfig::maxblockx; x++) 
   for (int y = nConfig::minblocky; y <= nConfig::maxblocky; y++)
 	{
   		cMapblock * block = pMapbuffer->CreateBlock(x, y);
@@ -503,11 +506,11 @@ void Renderer::RecalcHeight()
   		    block->GetBounds(&outbox, (tx+ty)*176, (tx-ty)*176);
 //  			block->RenderStatics((tx+ty)*176, (tx-ty)*176, SDLscreen->screen, NULL, TILE_CLASS_ITEM);
   		}
-  		}
+  	}
    nConfig::width = outbox.w;
    nConfig::height = outbox.h;
    hotspotx = - outbox.x;
    hotspoty = - outbox.y;
-   printf("Bitmap Size: %i %i\n", outbox.w, outbox.h);
+   printf("Bitmap Size: %i x %i\n", outbox.w, outbox.h);
 }
 

@@ -24,14 +24,6 @@ struct PatchFileHeader {
 };
 
 
-bool CheckHeaderID(char *ID1, char *ID2)
-{
-  for (int index = 0; index < 4; index++)
-    if(ID1[index] != ID2[index])
-      return false;
-  return true;
-}
-
 using namespace std;
 
 LocalMapPatches::LocalMapPatches ()

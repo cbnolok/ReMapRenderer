@@ -31,7 +31,7 @@ bool cHueLoader::load(std::string filename)
   unsigned int i = 0;
 
   // Read as many fonts as we can
-  while (!huefile.eof()) {
+  while (huefile.good()) {
     huefile.seekg(4, std::ios::cur);
 
     for (unsigned int j = 0; j < 8; ++j) {

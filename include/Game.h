@@ -23,11 +23,11 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
-#include "../libs/SDL/SDL.h"
+#include "SDL/SDL.h"
 #include "renderer/Renderer.h"
 #include "renderer/DynamicObjects.h"
 

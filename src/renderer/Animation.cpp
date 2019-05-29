@@ -36,4 +36,5 @@ sAnimationFrame * cAnimation::GetFrame(Uint32 frame)
 {
     if (frame < frames.size())
         return frames[frame];
+    return NULL;
 }

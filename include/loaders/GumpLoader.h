@@ -23,7 +23,7 @@
 #ifndef _GUMPLOADER_H_
 #define _GUMPLOADER_H_
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 

@@ -204,7 +204,7 @@ Texture * cArtLoader::LoadStaticArt(int index)
   if (patch.file) {
   	idx = patch.index;
   } else {
-        patch.file = artfile;
+    patch.file = artfile;
   	artindex->seekg(index * 12, ios::beg);
   	artindex->read((char *) &idx, sizeof(struct stIndexRecord));
   }

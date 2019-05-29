@@ -189,6 +189,7 @@ extern int binds;
 
 void cNodeQuadList::Render()
 {
+#ifdef COMPILE_INCOMPLETE_CODE
   nodequadlist_t::iterator iter;
   
   _transparent = false;
@@ -221,12 +222,13 @@ void cNodeQuadList::Render()
 		}
 	}
   }
- 
+#endif
 }
 
 
 void cNodeQuadList::RenderTransparent()
 {
+#ifdef COMPILE_INCOMPLETE_CODE
   nodequadlist_t::iterator iter;
   
   if (!_transparent || !SDLscreen)
@@ -258,12 +260,13 @@ void cNodeQuadList::RenderTransparent()
   }
   
   SDLscreen->SetAlpha(255);
-  
+#endif
 }
 
 
 void cNodeQuadList::RenderSelection()
 {
+#ifdef COMPILE_INCOMPLETE_CODE
   nodequadlist_t::iterator iter;
   
   for (iter = quads.begin(); iter != quads.end(); iter++)
@@ -278,5 +281,5 @@ void cNodeQuadList::RenderSelection()
   			glEnd();
 		}
   }
- 
+#endif
 }

@@ -23,7 +23,7 @@
 #ifndef _STATICOBJECTS_H_
 #define _STATICOBJECTS_H_
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -87,7 +87,7 @@ public:
   }
 };
 
-typedef std::list<struct cEntity *>  objectlist_t;
+typedef std::list<class cEntity *>  objectlist_t;
 
 class StaticObjectList
 {

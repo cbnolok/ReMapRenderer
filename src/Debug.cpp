@@ -8,7 +8,6 @@
 #include <string>
 #include "Debug.h"
 
-#define _DEBUG
 
 Debug pDebug;
 
@@ -25,10 +24,6 @@ Debug::~Debug()
 }
 
 // Only print to stderr in Debug mode, otherwise redirect to file (debug.txt)
-#ifndef WIN32
-#define _DEBUG
-#endif
-
 #ifndef _DEBUG
 bool logToFile = true;
 #else

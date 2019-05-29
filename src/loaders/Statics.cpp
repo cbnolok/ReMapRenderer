@@ -138,7 +138,7 @@ int StaticEngine::ReLoadTextures(char *filename)
 
 StaticModel *StaticEngine::Get(int index)
 {
-  (StaticModel *) result = (StaticModel *) staticbuffer->Get(index);	
+  StaticModel * result = (StaticModel *) staticbuffer->Get(index);	
   if (!result) {
   	std::map<Uint32, bool>::iterator iter = missing_tiles.find(index);
 	if (iter == missing_tiles.end()) {

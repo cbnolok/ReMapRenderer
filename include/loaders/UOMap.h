@@ -23,7 +23,7 @@
 #ifndef _UOMAP_H_
 #define _UOMAP_H_
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 

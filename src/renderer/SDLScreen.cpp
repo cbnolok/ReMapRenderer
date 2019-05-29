@@ -332,5 +332,6 @@ void SDLScreen::DoUpdate (Uint32 time)
 
 int SDLScreen::GetTextWidth(char * text, int font)
 {
+    return 0; // NOTE: INCOMPLETE CODE!
 }
 

@@ -15,6 +15,8 @@ cVerdataLoader * pVerdataLoader = NULL;
 
 cVerdataLoader::cVerdataLoader (std::string filename)
 {
+    patch_count = 0;
+
     string errstr;
 
     verdatafile = new ifstream(filename.c_str(), ios::in | ios::binary);

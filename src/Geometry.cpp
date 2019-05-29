@@ -407,8 +407,9 @@ float GetSquaredDistRayPoint(float vecOrigin[3], float vecDir[3], float vecPoint
 		       (vecOrigin[0]*vecDir[0] + vecOrigin[1]*vecDir[1] + vecOrigin[2]*vecDir[2]) -
 		       (vecPoint[0]*vecDir[0] + vecPoint[1]*vecDir[1] + vecPoint[2]*vecDir[2])
 			  ) / (vecDir[0]*vecDir[0] + vecDir[1]*vecDir[1] + vecDir[2]*vecDir[2]);
+    int i;
 
-	for(int i=0; i<3; i++) 
+	for(i=0; i<3; i++) 
 		vecX[i] = vecOrigin[i] + lambda*vecDir[i];
 
 	// Calculate squared distance of vecX and vecPoint

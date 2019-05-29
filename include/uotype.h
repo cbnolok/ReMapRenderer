@@ -2,7 +2,7 @@
 #define UOTYPE_H
 
 // Compiler directives
-#if  	defined(WIN32) && !defined(__MINGW32__)
+#if  	defined(_WIN32) && !defined(__MINGW32__)
 // Visual C pragma
 #pragma pack(1)
 #define STRUCT_PACKED
@@ -69,6 +69,7 @@ struct VerDataEntry {
  unsigned int extra;
 } STRUCT_PACKED;
 
+// TODO: support HS tiledata
 struct TileDataStaticEntry {
  unsigned int flags;
  unsigned char weight;
@@ -199,7 +200,7 @@ struct skill_name {
 #define VERDATAPATCH_ART  0x4
 #define VERDATAPATCH_GUMP 0xC
 
-#ifdef WIN32
+#ifdef _WIN32
 #pragma pack()
 #endif
 

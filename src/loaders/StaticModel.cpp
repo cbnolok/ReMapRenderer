@@ -146,7 +146,7 @@ int StaticModel::Load(ifstream * stream)
 
 int StaticModel::Paint(void)
 {
-
+#ifdef COMPILE_INCOMPLETE_CODE
   for (int index = 0; index < quadcount; index++) {
     if(!quads[index].gltex) {
       if(quads[index].texture >= 0) {
@@ -219,6 +219,8 @@ int StaticModel::Paint(void)
     glEnd();
 
   }
+
+#endif // COMPILE_INCOMPLETE_CODE
 
   return true;
 }
@@ -309,7 +311,7 @@ void StaticModel::CreateBoundaries(void)
 
 void StaticModel::AddToNodes (float x, float y, float z, cNodeList * nodes, cNodeQuadList * nodequads, struct sStaticObject * object)
 {
-  
+#ifdef COMPILE_INCOMPLETE_CODE
   for (int index = 0; index < quadcount; index++) {
     struct Quad  * quad = &quads[index];
     if(!quad->gltex) {
@@ -330,6 +332,7 @@ void StaticModel::AddToNodes (float x, float y, float z, cNodeList * nodes, cNod
     
   
   }
+#endif
 }
 
 

@@ -3,6 +3,7 @@
 // Created by: Alexander Oster - tensor@ultima-iris.de
 //
 
+
 #include <iostream>
 #include "loaders/StaticTextures.h"
 #include "Debug.h"
@@ -114,6 +115,7 @@ int StaticTextures::Load(ifstream * stream)
 
 GLuint StaticTextures::Get(int index)
 {
+#ifdef COMPILE_INCOMPLETE_CODE
   ofstream test;
 
   if((index >= 0) && (index < count)) {
@@ -128,5 +130,9 @@ GLuint StaticTextures::Get(int index)
   }
   pDebug.Log("Unknown Texture ID in StaticTextures::Get(int)", __FILE__,
 	     __LINE__, LEVEL_WARNING);
+#endif // COMPILE_INCOMPLETE_CODE
+
   return 0;
 }
+
+
