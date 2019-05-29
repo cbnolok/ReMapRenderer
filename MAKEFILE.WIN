@@ -1,0 +1,117 @@
+# Project: MapRenderer
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+RES      = obj/Ultima_Iris_2D_private.res
+OBJ      = obj/SDLEvent.o obj/MapRenderer.o obj/xml.o obj/Buffer.o obj/Config.o obj/Debug.o obj/Game.o obj/AnimBuffer.o obj/Characters.o obj/DynamicObjects.o obj/MapBlock.o obj/MapBuffer.o obj/Renderer.o obj/SDLScreen.o obj/StaticObjects.o obj/Texture.o obj/AnimLoader.o obj/GroundTextures.o obj/GumpLoader.o obj/HueLoader.o obj/LocalMapPatches.o obj/SkillLoader.o obj/TileDataLoader.o obj/UOMap.o obj/VerdataLoader.o obj/FontLoader.o obj/ArtLoader.o obj/Animation.o obj/TextureBuffer.o $(RES)
+LINKOBJ  = obj/SDLEvent.o obj/MapRenderer.o obj/xml.o obj/Buffer.o obj/Config.o obj/Debug.o obj/Game.o obj/AnimBuffer.o obj/Characters.o obj/DynamicObjects.o obj/MapBlock.o obj/MapBuffer.o obj/Renderer.o obj/SDLScreen.o obj/StaticObjects.o obj/Texture.o obj/AnimLoader.o obj/GroundTextures.o obj/GumpLoader.o obj/HueLoader.o obj/LocalMapPatches.o obj/SkillLoader.o obj/TileDataLoader.o obj/UOMap.o obj/VerdataLoader.o obj/FontLoader.o obj/ArtLoader.o obj/Animation.o obj/TextureBuffer.o $(RES)
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" "C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib/libwsock32.a"
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"include" -I"libs"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++" -I"include" -I"libs"
+BIN      = bin/MapRenderer
+CXXFLAGS = $(CXXINCS) -mmmx -O1 -pedantic
+CFLAGS   = $(INCS) -mmmx -O1 -pedantic
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+obj/SDLEvent.o: src/SDLEvent.cpp
+	$(CPP) -c src/SDLEvent.cpp -o obj/SDLEvent.o $(CXXFLAGS)
+
+obj/MapRenderer.o: src/MapRenderer.cpp
+	$(CPP) -c src/MapRenderer.cpp -o obj/MapRenderer.o $(CXXFLAGS)
+
+obj/xml.o: src/xml.cpp
+	$(CPP) -c src/xml.cpp -o obj/xml.o $(CXXFLAGS)
+
+obj/Buffer.o: src/Buffer.cpp
+	$(CPP) -c src/Buffer.cpp -o obj/Buffer.o $(CXXFLAGS)
+
+obj/Config.o: src/Config.cpp
+	$(CPP) -c src/Config.cpp -o obj/Config.o $(CXXFLAGS)
+
+obj/Debug.o: src/Debug.cpp
+	$(CPP) -c src/Debug.cpp -o obj/Debug.o $(CXXFLAGS)
+
+obj/Game.o: src/Game.cpp
+	$(CPP) -c src/Game.cpp -o obj/Game.o $(CXXFLAGS)
+
+obj/AnimBuffer.o: src/renderer/AnimBuffer.cpp
+	$(CPP) -c src/renderer/AnimBuffer.cpp -o obj/AnimBuffer.o $(CXXFLAGS)
+
+obj/Characters.o: src/renderer/Characters.cpp
+	$(CPP) -c src/renderer/Characters.cpp -o obj/Characters.o $(CXXFLAGS)
+
+obj/DynamicObjects.o: src/renderer/DynamicObjects.cpp
+	$(CPP) -c src/renderer/DynamicObjects.cpp -o obj/DynamicObjects.o $(CXXFLAGS)
+
+obj/MapBlock.o: src/renderer/MapBlock.cpp
+	$(CPP) -c src/renderer/MapBlock.cpp -o obj/MapBlock.o $(CXXFLAGS)
+
+obj/MapBuffer.o: src/renderer/MapBuffer.cpp
+	$(CPP) -c src/renderer/MapBuffer.cpp -o obj/MapBuffer.o $(CXXFLAGS)
+
+obj/Renderer.o: src/renderer/Renderer.cpp
+	$(CPP) -c src/renderer/Renderer.cpp -o obj/Renderer.o $(CXXFLAGS)
+
+obj/SDLScreen.o: src/renderer/SDLScreen.cpp
+	$(CPP) -c src/renderer/SDLScreen.cpp -o obj/SDLScreen.o $(CXXFLAGS)
+
+obj/StaticObjects.o: src/renderer/StaticObjects.cpp
+	$(CPP) -c src/renderer/StaticObjects.cpp -o obj/StaticObjects.o $(CXXFLAGS)
+
+obj/Texture.o: src/renderer/Texture.cpp
+	$(CPP) -c src/renderer/Texture.cpp -o obj/Texture.o $(CXXFLAGS)
+
+obj/AnimLoader.o: src/loaders/AnimLoader.cpp
+	$(CPP) -c src/loaders/AnimLoader.cpp -o obj/AnimLoader.o $(CXXFLAGS)
+
+obj/GroundTextures.o: src/loaders/GroundTextures.cpp
+	$(CPP) -c src/loaders/GroundTextures.cpp -o obj/GroundTextures.o $(CXXFLAGS)
+
+obj/GumpLoader.o: src/loaders/GumpLoader.cpp
+	$(CPP) -c src/loaders/GumpLoader.cpp -o obj/GumpLoader.o $(CXXFLAGS)
+
+obj/HueLoader.o: src/loaders/HueLoader.cpp
+	$(CPP) -c src/loaders/HueLoader.cpp -o obj/HueLoader.o $(CXXFLAGS)
+
+obj/LocalMapPatches.o: src/loaders/LocalMapPatches.cpp
+	$(CPP) -c src/loaders/LocalMapPatches.cpp -o obj/LocalMapPatches.o $(CXXFLAGS)
+
+obj/SkillLoader.o: src/loaders/SkillLoader.cpp
+	$(CPP) -c src/loaders/SkillLoader.cpp -o obj/SkillLoader.o $(CXXFLAGS)
+
+obj/TileDataLoader.o: src/loaders/TileDataLoader.cpp
+	$(CPP) -c src/loaders/TileDataLoader.cpp -o obj/TileDataLoader.o $(CXXFLAGS)
+
+obj/UOMap.o: src/loaders/UOMap.cpp
+	$(CPP) -c src/loaders/UOMap.cpp -o obj/UOMap.o $(CXXFLAGS)
+
+obj/VerdataLoader.o: src/loaders/VerdataLoader.cpp
+	$(CPP) -c src/loaders/VerdataLoader.cpp -o obj/VerdataLoader.o $(CXXFLAGS)
+
+obj/FontLoader.o: src/loaders/FontLoader.cpp
+	$(CPP) -c src/loaders/FontLoader.cpp -o obj/FontLoader.o $(CXXFLAGS)
+
+obj/ArtLoader.o: src/loaders/ArtLoader.cpp
+	$(CPP) -c src/loaders/ArtLoader.cpp -o obj/ArtLoader.o $(CXXFLAGS)
+
+obj/Animation.o: src/renderer/Animation.cpp
+	$(CPP) -c src/renderer/Animation.cpp -o obj/Animation.o $(CXXFLAGS)
+
+obj/TextureBuffer.o: src/renderer/TextureBuffer.cpp
+	$(CPP) -c src/renderer/TextureBuffer.cpp -o obj/TextureBuffer.o $(CXXFLAGS)
+
+obj/Ultima_Iris_2D_private.res: Ultima_Iris_2D_private.rc 
+	$(WINDRES) -i Ultima_Iris_2D_private.rc --input-format=rc -o obj/Ultima_Iris_2D_private.res -O coff 
+
