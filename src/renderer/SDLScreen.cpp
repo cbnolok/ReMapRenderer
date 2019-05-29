@@ -5,7 +5,6 @@
 
 #include "renderer/SDLScreen.h"
 #include "Config.h"
-#include "loaders/FontLoader.h"
 
 
 int flag_cullbackfaces = 0;
@@ -15,7 +14,6 @@ float BilinearTable[32][32][4];
 
 void CalcBilinearTable ()
 {   
-    int x, y; 
     float fracx, fracy;
     for (int y = 0; y < 32; y++)
         for (int x = 0; x < 32; x++)
@@ -28,14 +26,6 @@ void CalcBilinearTable ()
                       BilinearTable[y][x][3] = (1.0f - fracx) * (1.0f - fracy);
            }
 }
-/*  float d4 = fracx * fracy;
-  float d3 = (1.0f - fracx) * fracy;
-  float d2 = fracx * (1.0f - fracy);
-  float d1 = (1.0f - fracx) * (1.0f - fracy);
-
-/*	float frac = sqrt((fracx * fracx + fracy * fracy) / 2); */
-
-//  float smooth_z = (d1 * z1 + d2 * z2 + d3 * z3 + d4 * z4);
 
 SDLScreen::SDLScreen()
 {
@@ -54,12 +44,10 @@ SDLScreen::~SDLScreen()
 {
   if (screen)
   	SDL_FreeSurface(screen);
-  ClearFonts();
   SDL_Quit();
 }
 
-int
-  SDLScreen::Init(int width, int height, int bpp)
+int SDLScreen::Init(int width, int height, int bpp)
 {
 
   /* initialize SDL */
@@ -120,15 +108,6 @@ int
 
   SDL_EnableUNICODE(1);
   
-
-/*  atexit(SDLNet_Quit);
-  atexit(NET2_Quit);
-  atexit(SDL_Quit); */
-  //atexit(TTF_Quit);
-  //SDL_ShowCursor( SDL_DISABLE );
-  //SDL_WarpMouse( 320, 240 );
-  //NET2_Init();
-
   return true;
 }
 
@@ -173,106 +152,6 @@ int SDLScreen::DrawGL(void)
   return (true);
 }
 
-void SDLScreen::DisplayFps()
-{
-  if (!screen)
-  	return;
-  static float framesPerSecond = 0.0f;	// This will store our fps
-  static float lastTime = 0.0f;	// This will hold the time from the last frame
-  static char strFrameRate[40] = { "Fps: " };
-
-  float currentTime = SDL_GetTicks() * 0.001f;
-
-  ++framesPerSecond;
-  if(currentTime - lastTime > 1) {
-    lastTime = currentTime;
-    // Copy the frames per second into a string to display in the window title bar
-    sprintf(strFrameRate, "Ultima Iris, fps: %d", int (framesPerSecond));
-
-    // Set the window title bar to our string
-    SDL_WM_SetCaption(strFrameRate, NULL);	// The First argument is the window title
-    // Reset the frames per second
-    framesPerSecond = 0;
-
-  };
-
-  //string fps = string(strFrameRate);
-  //UOfont->drawString(0, fps, 0 ,0); */
-}
-
-int SDLScreen::ScreenSave()
-{
-/*  if (!screen)
-  	return 1;
-#ifndef WIN32
-  int screenInfo[4];
-
-  glGetIntegerv(GL_VIEWPORT, screenInfo);
-
-  unsigned char *image;
-  image = new unsigned char[screenInfo[2] * screenInfo[3] * 3];
-
-  glReadPixels(0, 0, screenInfo[2], screenInfo[3], GL_BGR,
-	       GL_UNSIGNED_BYTE, image);
-
-  ofstream screenshot;
-
-  screenshot.open("screenshot.tga", ios::out | ios::binary);
-
-  if(!screenshot.is_open()) {
-    cerr << "Could not open file writing\n";
-    return 0;
-  };
-
-  unsigned char Fileheader[12] = { 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-  unsigned char Imageheader[6] = { (screenInfo[2] % 256),
-    (screenInfo[2] / 256),
-    (screenInfo[3] % 256),
-    (screenInfo[3] / 256), 24, 0
-  };
-
-  screenshot.write((char *) &Fileheader, sizeof(Fileheader));
-  screenshot.write((char *) &Imageheader, sizeof(Imageheader));
-  screenshot.write((char *) image, screenInfo[2] * screenInfo[3] * 3);
-
-  screenshot.close();
-  delete[]image;
-#endif */
-
-  return 1;
-}
-
-
-
-void SDLScreen::SetPerspective()
-{
-}
-
-float SDLScreen::GetRatio(void)
-{
-	return 1.0f;
-}
-
-void SDLScreen::SetAlpha(Uint8 alpha)
-{
-}
-
-void SDLScreen::SetHue(Uint16 hue)
-{
-
-}
-
-void SDLScreen::SetLight(float factor)
-{
-}
-
-void SDLScreen::Flip()
-{
-	if (screen)
-		SDL_Flip(screen);
-	DisplayFps();
-}
-
 void SDLScreen::DrawSurface (SDL_Surface * surface, int x, int y)
 {
 	if (!surface)
@@ -286,31 +165,6 @@ void SDLScreen::DrawSurface (SDL_Surface * surface, int x, int y)
 	if (screen)
 		SDL_BlitSurface(surface, NULL, screen, &rect);
 }
-
-void SDLScreen::Lock()
-{
-	if (screen)
-		SDL_LockSurface(screen);
-}
-
-void SDLScreen::Unlock()
-{
-	if (screen)
-		SDL_UnlockSurface(screen);
-}
-
-void SDLScreen::ClearFonts ()
-{
-}
-
-void SDLScreen::RegisterFont (Uint32 id, std::string filename, Uint32 size)
-{
-}
-
-void SDLScreen::UnregisterFont (Uint32 id)
-{
-}
-
 
 void SDLScreen::CheckUpdate()
   {

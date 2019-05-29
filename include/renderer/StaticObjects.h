@@ -31,7 +31,6 @@
 
 #include <vector>
 
-#include "Characters.h"
 
 #define TILE_CLASS_GROUND    1
 #define TILE_CLASS_ITEM      2
@@ -72,20 +71,6 @@ public:
   virtual ~cGroundObject ();
 };
 
-class cStaticCharacter : public cEntity
-{
-public:
-  Uint32 id;
-  Uint16 model;
-  cCharacter * character;
-  
-  cStaticCharacter ()
-  {
-    tileclass = TILE_CLASS_CHARACTER;
-    id = 0;
-    model = 0;
-  }
-};
 
 typedef std::vector<class cEntity *>  objectlist_t;
 
@@ -105,7 +90,6 @@ public:
    void Clear (void);
    
    void InsertDynamic (cStaticObject * object);
-   void InsertCharacter (cStaticCharacter * object);
    void DeleteDynamic (Uint32 id);
    cStaticObject * AddStatic ();
    cGroundObject * AddGround ();

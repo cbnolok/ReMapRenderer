@@ -46,7 +46,6 @@ class cNode
   	cNode (Uint32 id);
 	~cNode ();
 	void AddQuad(void * quad);
-	void CalcNormal();
   protected:
 
 };
@@ -74,7 +73,6 @@ public:
 
    void Clear();
    cNode * AddNode(float x, float y, float z);
-   void CalcNormals();
    
 protected:
 
@@ -92,12 +90,8 @@ public:
    void Clear();
    sNodeQuad * AddQuad(void);
    
-   void Sort();
-   
-   void Render();
-   void RenderSelection();
-   void RenderTransparent();
-   
+   //void Sort();
+      
    bool transparent() { return _transparent; }
    
 protected:

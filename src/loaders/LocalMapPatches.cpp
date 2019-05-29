@@ -10,7 +10,6 @@
 #include "Debug.h"
 #include <stdlib.h>
 
-extern bool CheckHeaderID(char *ID1, char *ID2);
 
 char FILEID_PATCHES[] = "CP#1";
 
@@ -22,6 +21,14 @@ struct PatchFileHeader {
   int MapPatchStart;
   int reserved[9];
 };
+
+static bool CheckHeaderID(char *ID1, char *ID2)
+{
+    for (int index = 0; index < 4; index++)
+        if(ID1[index] != ID2[index])
+            return false;
+    return true;
+}
 
 
 using namespace std;

@@ -75,7 +75,6 @@ private:
  int groundtex;
  float boundaring_box_min[3];
  float boundaring_box_max[3];
- void CalcNormals (void);
  void AddQuadToNodes (float x, float y, float z, struct Quad * quad, cNodeList * nodes, cNodeQuadList * nodequads, struct sStaticObject * object);
  void CreateBoundaries(void);
 public:
@@ -83,16 +82,9 @@ public:
     int modelflags;
     StaticModel (int modelindex);
    ~StaticModel ();
-   int Load(std::ifstream * stream);
-   void SetTextures (StaticTextures * textures);
-   int Paint (void);
-   int PaintSelection (void);
    void AddToNodes (float x, float y, float z, cNodeList * nodes, cNodeQuadList * nodequads, struct sStaticObject * object);
    void SetTileData(struct TileDataStaticEntry * tiledata);
-   
-   bool CheckRay(float vecOrigin[3], float vecDir[3], float deltax, float deltay, float deltaz, float & lambda);
-
-   
+      
  float boundaring_sphere[5];
 protected:
 

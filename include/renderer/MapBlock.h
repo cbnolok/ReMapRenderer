@@ -31,7 +31,6 @@
 
 #include <iostream>
 #include "StaticObjects.h"
-#include "DynamicObjects.h"
 #include "Node.h"
 
 struct INT_Rect {
@@ -65,10 +64,6 @@ public:
 	   
    int blockx, blocky;
    
-   void AddDynamic (Uint32 id, int x, int y, int z, int tileid);
-   void AddCharacter (Uint32 id, int x, int y, int z, cCharacter * character);
-   void DeleteDynamic (Uint32 id);
-
    void GetBounds(INT_Rect * rect, int x, int y);
 protected:
 

@@ -7,39 +7,25 @@ set(SF_INCLUDE_BASE
     include/Config.h
     include/Debug.h
     include/Game.h
-    include/Geometry.h
     include/include.h
-    include/SDLEvent.h
     include/uotype.h
     include/xml.h
 )
 source_group(include FILES ${SF_INCLUDE_BASE})
 set(SF_INCLUDE_LOADERS 
-    include/loaders/AnimLoader.h
     include/loaders/ArtLoader.h
-    include/loaders/FontLoader.h
     include/loaders/GroundTextures.h
-    include/loaders/GumpLoader.h
     include/loaders/HueLoader.h
     include/loaders/LocalMapPatches.h
     include/loaders/Map.h
     include/loaders/MapPatches.h
-    include/loaders/SkillLoader.h
-    include/loaders/StaticModel.h
-    include/loaders/Statics.h
-    include/loaders/StaticTextures.h
     include/loaders/TileDataLoader.h
     include/loaders/UOMap.h
     include/loaders/VerdataLoader.h
 )
 source_group(include\\loaders FILES ${SF_INCLUDE_LOADERS})
 set(SF_INCLUDE_RENDERER 
-    include/renderer/Animation.h
-    include/renderer/AnimBuffer.h
     include/renderer/Camera.h
-    include/renderer/Characters.h
-    include/renderer/DynamicObjects.h
-    include/renderer/Fade.h
     include/renderer/MapBlock.h
     include/renderer/MapBuffer.h
     include/renderer/Node.h
@@ -57,36 +43,22 @@ set(SF_BASE
     src/Config.cpp
     src/Debug.cpp
     src/Game.cpp
-    src/Geometry.cpp
     src/MapRenderer.cpp
-    src/SDLEvent.cpp
     src/xml.cpp
 )
 source_group(src FILES ${SF_BASE})
 set(SF_LOADERS
-    src/loaders/AnimLoader.cpp
     src/loaders/ArtLoader.cpp
-    src/loaders/FontLoader.cpp
     src/loaders/GroundTextures.cpp
-    src/loaders/GumpLoader.cpp
     src/loaders/HueLoader.cpp
     src/loaders/LocalMapPatches.cpp
-    src/loaders/SkillLoader.cpp
-    src/loaders/StaticModel.cpp
-    src/loaders/Statics.cpp
-    src/loaders/StaticTextures.cpp
     src/loaders/TileDataLoader.cpp
     src/loaders/UOMap.cpp
     src/loaders/VerdataLoader.cpp
 )
 source_group(src\\loaders FILES ${SF_LOADERS})
 set(SF_RENDERER
-    src/renderer/Animation.cpp
-    src/renderer/AnimBuffer.cpp
     src/renderer/Camera.cpp
-    src/renderer/Characters.cpp
-    src/renderer/DynamicObjects.cpp
-    src/renderer/Fade.cpp
     src/renderer/MapBlock.cpp
     src/renderer/MapBuffer.cpp
     src/renderer/Node.cpp

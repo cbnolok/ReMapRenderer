@@ -7,7 +7,6 @@
 #include "renderer/SDLScreen.h"
 #include "renderer/TextureBuffer.h"
 #include "loaders/Map.h"
-#include "SDLEvent.h"
 #include "Debug.h"
 #include "Game.h"
 #include "Config.h"
@@ -15,8 +14,6 @@
 using namespace std;
 
 
-
-SDLEvent *SDLevent;
 SDLScreen *SDLscreen;
 
 
@@ -44,7 +41,6 @@ int main(int argc, char *argv[])
 
   
   SDLscreen = new SDLScreen();
-  SDLevent = new SDLEvent;
 
   int detail = nConfig::detail;
   if (detail < 0) detail = 0;
@@ -65,7 +61,7 @@ int main(int argc, char *argv[])
   
   SDLscreen->Init(1024, 1024, 32);
 
-  Uint8 bmpheader[54] = {
+  constexpr Uint8 bmpheader[54] = {
    0x42,0x4D,0xCE,0x3A,0x00,0x00,0x00,0x00,0x00,0x00,
    0x36,0x00,0x00,0x00,0x28,0x00,0x00,0x00,0x64,0x00,
    0x00,0x00,0x32,0x00,0x00,0x00,0x01,0x00,0x18,0x00,
@@ -169,7 +165,6 @@ int main(int argc, char *argv[])
 
   pGame.DeInit();
   
-  delete SDLevent;
   delete SDLscreen;
 
   return -1;

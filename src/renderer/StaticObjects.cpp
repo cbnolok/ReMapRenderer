@@ -73,19 +73,6 @@ void StaticObjectList::InsertDynamic (cStaticObject * object)
     
 }
 
-void StaticObjectList::InsertCharacter (cStaticCharacter * object)
-{
-    printf("Act_Char\n");
-/*  for (objectlist_t::iterator iter = objectlist.begin(), iterend = objectlist.end(); iter != iterend; ++iter) {
-   	    if (!TestObject(object, *iter) ) {
-   	            objectlist.insert(iter, object);
-   	            return;
-        }
-   	} */
-    objectlist.push_back(object);
-    
-}
-
 void StaticObjectList::DeleteDynamic (Uint32 id)
 {
 }

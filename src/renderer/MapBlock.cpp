@@ -14,9 +14,6 @@
 #include "renderer/TextureBuffer.h"
 #include "renderer/StaticObjects.h"
 #include "renderer/SDLScreen.h"
-#include "renderer/AnimBuffer.h"
-#include "loaders/Statics.h"
-#include "Geometry.h"
 #include "loaders/TileDataLoader.h"
 #include "loaders/HueLoader.h"
 
@@ -24,8 +21,7 @@ using namespace std;
 
 extern SDLScreen *SDLscreen;
 
-Uint32
-getAnimationBase (Uint32 model)
+Uint32 getAnimationBase (Uint32 model)
 {
   if (model < 0xc8)
     {
@@ -409,16 +405,6 @@ void CreateObject(cEntity *object, unsigned int x, unsigned int y,
 		}
 			
   }
-/*  object->flags = model->modelflags;
-  object->height = model->infos.height;
-  object->tiledata_flags = model->infos.flags;
-  object->sphere[0] = model->boundaring_sphere[0] + object->x;
-  object->sphere[1] = model->boundaring_sphere[1] + object->y;
-  object->sphere[2] = model->boundaring_sphere[2] + object->z;
-  object->sphere[3] = model->boundaring_sphere[3];
-  object->sphere[4] = model->boundaring_sphere[4];
-  object->alpha = 255;
-  object->fader = NULL; */
 }
 
 void ExtractCell (struct MulCell * cell, Sint8 * heightmap, Uint16 * groundid) {
@@ -744,44 +730,7 @@ void cMapblock::RenderStatics(int x, int y, SDL_Surface * target, SDL_Rect * cli
 				
 			}
 		}
-		
-		if (object->tileclass == TILE_CLASS_CHARACTER) {
-		   cStaticCharacter * character = static_cast<cStaticCharacter *>(object);
-		   Uint32 base_anim = getAnimationBase(character->character->body());
-		   cAnimation * anim = pAnimBuffer->GetAnimation(base_anim);
-		   int frameid = character->character->anim_frame;
-		   if (frameid >= anim->count())
-		        frameid = 0;
-		   sAnimationFrame * frame = anim->GetFrame(frameid);
-		   if (frame && frame->surface) {
-             SDL_Rect rect;
-             rect.w = frame->surface->w;
-             rect.h = frame->surface->h;
-		     rect.x = x + object->draw_x- frame->centerx;
-             rect.y = y + object->draw_y - rect.h- frame->centery;
-  			SDL_BlitSurface(frame->surface, NULL, target, &rect);
-           }
-           for (int f=0; f < 30; f++) {
-                      cCharacterEquip * equip = character->character->GetEquip(f);
-                      if (equip) {
-                               base_anim = getAnimationBase(equip->anim());
-                      		   cAnimation * anim = pAnimBuffer->GetAnimation(base_anim);
-                      		   if (anim) {
-                   		   sAnimationFrame * frame = anim->GetFrame(frameid);
-		   if (frame && frame->surface) {
-             SDL_Rect rect;
-             rect.w = frame->surface->w;
-             rect.h = frame->surface->h;
-		     rect.x = x + object->draw_x - frame->centerx;
-             rect.y = y + object->draw_y - rect.h- frame->centery;
-    			SDL_BlitSurface(frame->surface, NULL, target, &rect); 
-           } 
-           }}}
-		   frameid ++;
-           character->character->anim_frame = frameid;
-		   //SDLscreen->DrawSurface(frame->surface, 100,100);
-		}
-		
+			
 		if (object->tileclass == TILE_CLASS_ITEM) {
 		cStaticObject * item = (cStaticObject *) object;
 /*		int tx = 7-object->y % 8;
@@ -822,38 +771,6 @@ void cMapblock::RenderStatics(int x, int y, SDL_Surface * target, SDL_Rect * cli
 
      
 }
-
-void cMapblock::AddDynamic (Uint32 id, int x, int y, int z, int tileid)
-{
-    cStaticObject * object = new cStaticObject;
-	CreateObject(object, blockx * 8 + x, blocky * 8 + y, 
-					z, tileid);
-	object->id = id;
-	objects.InsertDynamic(object);
-}
-
-void cMapblock::AddCharacter (Uint32 id, int x, int y, int z, cCharacter * c_char)
-{
-    cStaticCharacter * character = new cStaticCharacter;
-    character->x = x;
-    character->y = y;
-    character->z = z;
-    character->blockx = blockx;
-    character->blocky = blocky;
-    character->character = c_char;
-	character->id = id;
-	int tx = 7-character->y % 8;
-	int ty = (character->x % 8);
-	character->draw_x = (tx+ty) * 22;
-	character->draw_y = (ty-tx) * 22 - z * 4;
-	objects.InsertCharacter(character);
-}
-
-void cMapblock::DeleteDynamic (Uint32 id)
-{
-	objects.DeleteDynamic(id);
-}
-
 
 int cMapblock::GetGroundZ(Uint32 x, Uint32 y)
 {

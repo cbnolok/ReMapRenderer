@@ -42,21 +42,14 @@ class Renderer
 private:
 	void RenderTerrain (SDL_Surface * target, int mx, int my);
 	void RenderStatics (SDL_Surface * target, int mx, int my);
-	void RenderDynamics (bool do_culling);
-	void RenderCharacters (bool do_culling);
 	int view_distance;
-	float m_lightlevel;
 	
 	bool do_redraw;
 	SDL_Surface * static_buffer;
 	SDL_Surface * ground_buffer;
 	
 	int cache_x;
-	int cache_y;
-	
-	int bufferpos_x;
-	int bufferpos_y;
-	
+	int cache_y;	
 	
 public:
     Renderer ();
@@ -64,29 +57,11 @@ public:
 
    virtual int Init(void);
    virtual int DeInit(void);
-   virtual int RenderScene(void);
 
-   void SetRenderFlag(int flag, int value);
-   int GetRenderFlag(int flag);
-   void FadeStatics(int to, Uint32 time);
-   
-   int GetRoofHeight();
-   void AdjustCameraZ();
-   
    int GetViewDistance() { return view_distance; }
-   
-   void setLightLevel(float lightlevel) { m_lightlevel = lightlevel; }
-   float lightlevel () { return m_lightlevel; }
-   
-   void Scroll (int x, int y);
+      
    void Rebuild (int mx, int my);
-   void RebuildPartX(int dir);
-   void RebuildPartY(int dir);
 	
-   int baseblock_x, baseblock_y;
-   
-   void TeleportTo(int x, int y);
-   
    void RecalcHeight();
    
 protected:

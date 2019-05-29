@@ -39,7 +39,6 @@ using namespace std;
 class SDLScreen
 {
 private:
-  void DisplayFps ();
   const SDL_VideoInfo *videoInfo;
   Uint8 act_alpha;
   
@@ -51,32 +50,15 @@ public:
    ~SDLScreen ();
 
   int Init (int width, int height, int bpp);
-  int ResizeWindow (int width, int height);
   void ToggleFullScreen ();
   void ClearScreen ();
   void ClearZBuffer ();
   int DrawGL (void);
-  int ScreenSave ();
   SDL_Surface *screen;
   int videoFlags;
-  void SetPerspective(void);
-  float GetRatio(void);
-  
-  void SetAlpha(Uint8 alpha);
-  void SetHue(Uint16 hue = 0);
-  
-  void ClearFonts ();
-  void RegisterFont (Uint32 id, std::string filename, Uint32 size);
-  void UnregisterFont (Uint32 id);
   int GetTextWidth(char * text, int font);
   
-  void SetLight(float factor);
-  
-  void Flip();
   void DrawSurface (SDL_Surface * surface, int x, int y);
-  
-  void Lock();
-  void Unlock();
   
   bool do_redraw;
   void CheckUpdate();
