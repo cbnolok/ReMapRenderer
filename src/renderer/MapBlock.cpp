@@ -210,16 +210,16 @@ SDL_Surface * CreateHuedSurface(SDL_Surface * surface, Uint16 HueID)
     return result;
 }
 
-void LightenPixel(Uint32 * pixel, Sint16 value)
+static inline void LightenPixel(Uint32 * pixel, Sint16 value)
 {
     Uint8 * p = (Uint8 *) pixel;
-    for (int i = 0; i < 3; i++) {
+    for (unsigned char i = 0; i < 3; ++i) {
         Sint16 v = *p + value;
         if (v < 0) v = 0;
         else
           if (v > 255) v = 255;
         *p = v;        
-        p++;
+        ++p;
     }   
 }
 
@@ -428,7 +428,7 @@ void ExtractCell (struct MulCell * cell, Sint8 * heightmap, Uint16 * groundid) {
 		*groundid = cell->tileid;
 }
 
-bool cMapblock::Generate(int blockx, int blocky  )
+bool cMapblock::Generate(int blockx, int blocky)
 {
   int i, j;
   if (!pMapLoader || !pTextureBuffer)
@@ -442,12 +442,10 @@ bool cMapblock::Generate(int blockx, int blocky  )
   int x, y;
   
   pMapLoader->LoadMapBlock(blockx, blocky, &block);
-
   for (y = 0; y < 8; y++)
     for (x = 0; x < 8; x++) 
       ExtractCell(&block.cells[y][x], &heightmap[y][x], &groundids[y][x]);
     
-
   pMapLoader->LoadMapBlock(blockx + 1, blocky, &block);
   for (y = 0; y < 8; y++)
     for (x = 0; x < 2; x++)
@@ -462,7 +460,6 @@ bool cMapblock::Generate(int blockx, int blocky  )
   for (y = 0; y < 2; y++)
     for (x = 0; x < 2; x++)
   ExtractCell(&block.cells[y][x], &heightmap[8+y][8+x], NULL); 
-
 
 
   int min_x = 1000000;
@@ -598,11 +595,9 @@ void cMapblock::RenderGround(int x, int y, SDL_Surface * target, SDL_Rect * clip
 		
 	int i, j;
 	objectlist_t * objectlist = objects.GetList();
-   	objectlist_t::iterator iter;
-   	for (iter = objectlist->begin(); iter != objectlist->end(); iter++) {
-	  cEntity * object = *iter;
+   	for (cEntity * object : *objectlist) {
 	  if (object->tileclass == TILE_CLASS_GROUND)  {
-		cGroundObject * ground = (cGroundObject *) object;
+		cGroundObject * ground = static_cast<cGroundObject *>(object);
 		SDL_Rect rect;
 		SDL_Surface * surface = 0;
 	    if (ground->stretch) {
@@ -711,16 +706,12 @@ void cMapblock::RenderStatics(int x, int y, SDL_Surface * target, SDL_Rect * cli
 	
 		if (((outbox.x + outbox.w + x) < 0) || ((outbox.y + outbox.h + y) < 0) || (outbox.x + x > 1023) || (outbox.y + y> 1023))
 			return; 
-	
-	int i, j;
-		
+			
 	objectlist_t * objectlist = objects.GetList();
-   	objectlist_t::iterator iter;
-   	for (iter = objectlist->begin(); iter != objectlist->end(); iter++) {
-		cEntity * object = *iter;
+   	for (cEntity * object : *objectlist) {
 		if (object->tileclass & tile_type) {
 		if (object->tileclass == TILE_CLASS_GROUND)  {
-		  cGroundObject * ground = (cGroundObject *) object;
+		  cGroundObject * ground = static_cast<cGroundObject *>(object);
 //printf("%i\n",		  ground->tileid);
 				SDL_Rect rect;
 				rect.x = ground->draw_x + x;
@@ -755,7 +746,7 @@ void cMapblock::RenderStatics(int x, int y, SDL_Surface * target, SDL_Rect * cli
 		}
 		
 		if (object->tileclass == TILE_CLASS_CHARACTER) {
-		   cStaticCharacter * character = (cStaticCharacter *) object;
+		   cStaticCharacter * character = static_cast<cStaticCharacter *>(object);
 		   Uint32 base_anim = getAnimationBase(character->character->body());
 		   cAnimation * anim = pAnimBuffer->GetAnimation(base_anim);
 		   int frameid = character->character->anim_frame;
@@ -871,8 +862,6 @@ int cMapblock::GetGroundZ(Uint32 x, Uint32 y)
 	return 0;
 }
 
-
-
 int cMapblock::GetWalkZ(Uint32 dstx, Uint32 dsty, int srcz)
 {
 	if ((dstx >= 8) || (dsty >= 8))
@@ -880,12 +869,10 @@ int cMapblock::GetWalkZ(Uint32 dstx, Uint32 dsty, int srcz)
 	int ground = heightmap[dsty][dstx];
      	
 	objectlist_t * objectlist = objects.GetList();
-   	objectlist_t::iterator iter;
-   	for (iter = objectlist->begin(); iter != objectlist->end(); iter++) {
-		cEntity * object = *iter;
+   	for (cEntity * object : *objectlist) {
 		if (object->tileclass != TILE_CLASS_ITEM)
 		  continue;
-        cStaticObject * item = (cStaticObject *) object;
+        cStaticObject * item = static_cast<cStaticObject *>(object);
 		if ((object->x == dstx) && (object->y == dsty)) {
 			if (item->tiledata_flags & (TILEDATAFLAG_SURFACE | TILEDATAFLAG_BRIDGE | TILEDATAFLAG_STAIRBACK | TILEDATAFLAG_STAIRRIGHT)) 
 			{

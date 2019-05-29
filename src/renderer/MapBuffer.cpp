@@ -24,10 +24,8 @@ cMapbuffer::~cMapbuffer()
 
 void cMapbuffer::Clear(void)
 {
-  MapBuffer_t::iterator iter;
-
-  for (iter = root.begin(); iter != root.end(); iter++)
-    delete(*iter).second;
+    for (MapBuffer_t::value_type const& obj : root)
+        delete obj.second;
 
   root.clear();
   cache.clear();
@@ -59,17 +57,17 @@ void cMapbuffer::Add(cMapblock * block)
   if ((nConfig::cache_block > 0) && (cache.size() >= nConfig::cache_block)) {
     cMapblock * nblock = cache[0];
     root.erase(nblock->blockx << 16 | nblock->blocky);
-    cache.erase(cache.begin());
     delete nblock;
-  
+    cache[0] = block;
   }  
+  else {
+    cache.push_back(block);
+  }
 
-
-  Uint16 x = block->blockx;
-  Uint16 y = block->blocky;
-
+  const Uint16 x = block->blockx;
+  const Uint16 y = block->blocky;
   root.insert(make_pair((Uint32) x << 16 | y, block));
-  cache.push_back(block);
+  
 }
 
 cMapblock *cMapbuffer::CreateBlock(int x, int y)
@@ -98,10 +96,7 @@ cMapblock *cMapbuffer::CreateBlock(int x, int y)
 
 void cMapbuffer::FreeBuffer(int blockx, int blocky, int radius)
 {
-  MapBuffer_t::iterator iter;
-  
-
-  for (iter = root.begin(); iter != root.end(); iter++)
+  for (MapBuffer_t::iterator iter = root.begin(), iterend = root.end(); iter != iterend; ++iter)
   {
     if ((iter->second->blockx < blockx - radius) ||
         (iter->second->blockx > blockx + radius) ||

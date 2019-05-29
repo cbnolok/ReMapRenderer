@@ -49,10 +49,13 @@ namespace nConfig {
   int maxx = 1900;
   int maxy = 2680;
   
-  int cache_art = 500;
-  int cache_texture = 200;
-  int cache_ground = 1000;
-  int cache_block = 100;
+  // size in bytes
+  int cache_art = 500000;
+  int cache_texture = 200000;
+  int cache_ground = 1000000;
+
+  // number of blocks
+  int cache_block = 1000;
 
   int detail = 0;
 }

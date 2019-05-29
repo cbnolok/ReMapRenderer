@@ -3,7 +3,7 @@
 // Created by: Alexander Oster - tensor@ultima-iris.de
 //
 
-#include <iostream>
+#include <algorithm>
 #include "renderer/StaticObjects.h"
 #include "include.h"
 
@@ -24,9 +24,8 @@ cGroundObject::~cGroundObject ()
 }
 
    void StaticObjectList::Clear (void) {
-   	objectlist_t::iterator iter;
-   	for (iter = objectlist.begin(); iter != objectlist.end(); iter++)
-		delete (*iter);
+    for (cEntity * elem : objectlist)
+		delete elem;
 	objectlist.clear();
    	
    }
@@ -43,7 +42,7 @@ cGroundObject::~cGroundObject ()
 	return result;
   }
 
-bool TestObject (cEntity * object1, cEntity * object2)
+static inline bool TestObject (cEntity * object1, cEntity * object2)
 {
   if (object1->tileclass != object2->tileclass) 
     return (object1->tileclass < object2->tileclass);
@@ -58,23 +57,13 @@ bool TestObject (cEntity * object1, cEntity * object2)
   return false;
 }
 
-struct functor_ltszi
-{
- bool operator()(cEntity * object1, cEntity * object2) const
- {
- return TestObject(object1, object2);
- } 
-};
-
-
 void StaticObjectList::Sort(void) {
-  objectlist.sort (functor_ltszi ());
+  std::sort(objectlist.begin(), objectlist.end(), TestObject);
 }
 
 void StaticObjectList::InsertDynamic (cStaticObject * object)
 {
-   	objectlist_t::iterator iter;
-   	for (iter = objectlist.begin(); iter != objectlist.end(); iter++) {
+   	for (objectlist_t::iterator iter = objectlist.begin(), iterend = objectlist.end(); iter != iterend; ++iter) {
    	    if (!TestObject(object, *iter) ) {
    	            objectlist.insert(iter, object);
    	            return;
@@ -87,8 +76,7 @@ void StaticObjectList::InsertDynamic (cStaticObject * object)
 void StaticObjectList::InsertCharacter (cStaticCharacter * object)
 {
     printf("Act_Char\n");
-/*   	objectlist_t::iterator iter;
-   	for (iter = objectlist.begin(); iter != objectlist.end(); iter++) {
+/*  for (objectlist_t::iterator iter = objectlist.begin(), iterend = objectlist.end(); iter != iterend; ++iter) {
    	    if (!TestObject(object, *iter) ) {
    	            objectlist.insert(iter, object);
    	            return;

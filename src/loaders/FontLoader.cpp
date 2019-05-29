@@ -19,9 +19,7 @@ cFontLoader::~cFontLoader()
   std::map < unsigned short, stFont >::const_iterator it;
 
   for (it = fonts.begin(); it != fonts.end(); ++it) {
-    unsigned int i;
-
-    for (i = 0; i < 224; ++i) {
+    for (unsigned int i = 0; i < 224; ++i) {
       delete[]it->second.chars[i].pixels;
       delete[]it->second.chars[i].redmask;
     }

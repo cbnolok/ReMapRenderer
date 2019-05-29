@@ -38,12 +38,10 @@ void cNode::CalcNormal(void)
 	if (!quads.size())
 		return;
 		
-	int i;
-        for (i = 0; i < 3; i++)
+    for (int i = 0; i < 3; ++i)
 		normal[i] = 0;
-
-	vector <void *>::iterator iter;
-	for (iter=quads.begin(); iter != quads.end(); iter++)
+    
+	for (vector <void *>::iterator iter=quads.begin(), iterend = quads.end(); iter != iterend; ++iter)
 	{
 		sNodeQuad * quad = (sNodeQuad *) (*iter);
 	    	VectorAdd(quad->normal, normal);
@@ -54,7 +52,7 @@ void cNode::CalcNormal(void)
 		NormalizeVector(normal);
       	else {
 		sNodeQuad * quad = (sNodeQuad *) quads[0];
-		for (i=0; i < 3; i++)
+		for (int i=0; i < 3; ++i)
 	  		normal[i] = quad->normal[i];
 	}
 	
@@ -86,8 +84,8 @@ void cNodeList::Clear(void)
 
 cNode * cNodeList::AddNode(float x, float y, float z)
 {
-	int nx = (int) x / 2.0f;
-	int ny = (int) y / 2.0f;
+	int nx = (int) (x / 2.0f);
+	int ny = (int) (y / 2.0f);
 	if (nx < 0) nx = 0;
 	if (nx > 3) nx = 3;
 	if (ny < 0) ny = 0;

@@ -122,6 +122,8 @@ else (WIN32)
 endif (WIN32)
 
 include_directories("${CMAKE_SOURCE_DIR}/include/" "${CMAKE_SOURCE_DIR}/include_sdl/")
+
+set(CMAKE_CXX_STANDARD 11) # c++11
 add_executable(ReMapRenderer 
     ${SF_INCLUDE_BASE} ${SF_INCLUDE_LOADERS} ${SF_INCLUDE_RENDERER} 
     ${SF_BASE} ${SF_LOADERS} ${SF_RENDERER}

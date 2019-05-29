@@ -44,9 +44,8 @@ cDynamicObjectList::~cDynamicObjectList ()
 
 void cDynamicObjectList::Clear()
 {
-	dynamiclist_t::iterator iter;
-	for (iter = dynamiclist.begin(); iter != dynamiclist.end(); iter++)
-		delete iter->second;
+    for (dynamiclist_t::value_type const& obj : dynamiclist)
+		delete obj.second;
 	dynamiclist.clear();
 }
 

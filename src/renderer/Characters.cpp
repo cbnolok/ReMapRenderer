@@ -58,9 +58,8 @@ cCharacter::~cCharacter ()
 
 void cCharacter::ClearEquip (void)
 {
-	equiplist_t::iterator iter;
-	for (iter = equiplist.begin(); iter != equiplist.end(); iter++)
-		delete iter->second;
+    for (equiplist_t::value_type const& elem : equiplist)
+		delete elem.second;
 	equiplist.clear();
 }
    
@@ -159,7 +158,7 @@ sSkillEntry * cCharacter::skill (Uint16 id)
 void cCharacter::ClearSkills ()
 {
 	skilllist_t::iterator iter;
-	for (iter = m_skills.begin(); iter != m_skills.end(); iter++) 
+	for (iter = m_skills.begin(); iter != m_skills.end(); ++iter) 
 		delete iter->second;
 	m_skills.clear();
 	
@@ -179,7 +178,7 @@ cCharacterList::~cCharacterList ()
 void cCharacterList::Clear()
 {
 	characterlist_t::iterator iter;
-	for (iter = characterlist.begin(); iter != characterlist.end(); iter++)
+	for (iter = characterlist.begin(); iter != characterlist.end(); ++iter)
 		delete iter->second;
 	characterlist.clear();
 }
@@ -214,7 +213,7 @@ cCharacter * cCharacterList::Get (unsigned int id)
 void cCharacterList::Handle(float time_factor)
 {
 	characterlist_t::iterator iter;
-	for (iter = characterlist.begin(); iter != characterlist.end(); iter++)
+	for (iter = characterlist.begin(); iter != characterlist.end(); ++iter)
 		iter->second->Handle(time_factor);
 }
 

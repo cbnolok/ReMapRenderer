@@ -29,7 +29,7 @@
 
 #include "SDL/SDL.h"
 
-#include <list>
+#include <vector>
 
 #include "Characters.h"
 
@@ -87,7 +87,7 @@ public:
   }
 };
 
-typedef std::list<class cEntity *>  objectlist_t;
+typedef std::vector<class cEntity *>  objectlist_t;
 
 class StaticObjectList
 {

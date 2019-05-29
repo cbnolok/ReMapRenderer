@@ -34,7 +34,7 @@ SDLScreen *SDLscreen;
 extern "C" // needed by SDL
 int main(int argc, char *argv[])
 {
-  printf("(Re)MapRenderer v1.0 (%u bits build).\n", (sizeof(void*) * 4));
+  printf("(Re)MapRenderer v1.0 (%u bits build).\n", (sizeof(void*) * 8));
 
 
   if(!nConfig::Init()) {
