@@ -142,7 +142,7 @@ void Renderer::RecalcHeight()
   outbox.w = 0;
   outbox.h = 0;
 
-  printf("Caching UO data...\n");
+  printf("Calculating render size in pixels (non-zoomed)...");
   for (int x = nConfig::minblockx; x <= nConfig::maxblockx; x++) 
   for (int y = nConfig::minblocky; y <= nConfig::maxblocky; y++)
 	{
@@ -159,5 +159,5 @@ void Renderer::RecalcHeight()
    nConfig::height = outbox.h;
    hotspotx = - outbox.x;
    hotspoty = - outbox.y;
-   printf("Bitmap Size: %i x %i\n", outbox.w, outbox.h);
+   printf(" %i x %i\n", outbox.w, outbox.h);
 }

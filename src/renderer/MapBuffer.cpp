@@ -78,7 +78,7 @@ cMapblock *cMapbuffer::CreateBlock(int x, int y)
   if ((x < 0) || (y < 0))
   	return NULL; 
 
-  if((block = Get(x, y)))	/* check buffer for block */
+  if ((block = Get(x, y)))	/* check buffer for block */
     return block;
 
 

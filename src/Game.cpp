@@ -129,8 +129,6 @@ int Game::DeInit(void)
        delete renderer;
        renderer = NULL;
     }
-       
-
 
  return (true); 
 }

@@ -82,9 +82,15 @@ int main(int argc, char *argv[])
   Uint8 * data = (Uint8 *) malloc (1024 * 1024 * 3);
   memset(data, 0, 1024 * 1024 * 3);
   
-  printf("Creating Bitmap (%i/%i): %i bytes (Zoom 1/%i)....\n", (*width), (*height), real_mem * 3, divisor);
+  printf("Creating Bitmap file (%i x %i): %i bytes (Zoom 1/%i)...", (*width), (*height), real_mem * 3, divisor);
   
   ofstream * file = new ofstream(nConfig::output.c_str(), ios::out | ios::binary);
+  if (file->fail())
+  {
+      printf(" error.\n");
+      goto goto_end;
+  }
+
   file->write((char*) bmpheader, 54);
   for (int i = 0; i < blockcount; i++)
     file->write((char*) data, 1024 * 1024 * 3);
@@ -93,8 +99,9 @@ int main(int argc, char *argv[])
   if (rest > 0) 
     file->write((char*) data, rest * 3);
   
+  printf(" done.\n");
 
-  printf("Rendering Area (%i/%i) to (%i/%i)\n", nConfig::minx, nConfig::miny, nConfig::maxx, nConfig::maxy);
+  printf("Area to render (X/Y): (%i/%i) to (%i/%i).\n", nConfig::minx, nConfig::miny, nConfig::maxx, nConfig::maxy);
   
   const int bxcount = t_width / 1024;
   const int bycount = t_height / 1024;
@@ -102,13 +109,13 @@ int main(int argc, char *argv[])
   
   const int size = 1024 / divisor;
   
-  int idx = 0;
+  int idx = 1;
 
   for (int blocky = 0; blocky <= bycount; blocky ++)
      for (int blockx = 0; blockx <= bxcount; blockx ++) {
        int xcount = size; if (blockx == bxcount) xcount = (t_width % 1024) / divisor;
        int ycount = size; if (blocky == bycount) ycount = (t_height % 1024) / divisor;
-       printf("\rRendering block %i/%i", idx, bcount);
+       printf("\rRendering Block %i/%i...", idx, bcount);
        SDL_FillRect(SDLscreen->screen, NULL, 0);
        pGame.GetRenderer()->Rebuild(- blockx * 1024,- blocky * 1024);
        
@@ -154,18 +161,23 @@ int main(int argc, char *argv[])
        if (detail > 0) 
               free(pixels); 
               
-       idx++;
+       ++idx;
   }
-  printf(" -> done\n");
+  printf("\nDone!\n");
+
+goto_end:
    delete file;
    free(data);
-
   
 //  SDLscreen->Save("test.bmp");
-
   pGame.DeInit();
-  
   delete SDLscreen;
+
+  if (argc)
+  {
+    printf("Press a key to exit...\n.");
+    getchar();
+  }
 
   return -1;
 }

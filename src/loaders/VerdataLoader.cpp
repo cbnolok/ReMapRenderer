@@ -11,11 +11,12 @@
 
 using namespace std;
 
-cVerdataLoader * pVerdataLoader = NULL;
+cVerdataLoader * pVerdataLoader = nullptr;
 
 cVerdataLoader::cVerdataLoader (std::string filename)
 {
     patch_count = 0;
+    patches = nullptr;
 
     string errstr;
 
@@ -32,7 +33,7 @@ cVerdataLoader::cVerdataLoader (std::string filename)
 	errstr += filename;
 	pDebug.Log((char *)errstr.c_str(), __FILE__, __LINE__, LEVEL_ERROR);
 	delete verdatafile;
-	verdatafile = NULL;
+	verdatafile = nullptr;
 	return;
     }
     
@@ -45,14 +46,16 @@ cVerdataLoader::cVerdataLoader (std::string filename)
 
 cVerdataLoader::~cVerdataLoader ()
 {
-	delete verdatafile;
-	free(patches);
+	if (verdatafile)
+        delete verdatafile;
+    if (patches)
+	    free(patches);
 }
 
 struct sPatchResult cVerdataLoader::FindPatch (unsigned int fileid, unsigned int blockid)
 {
 	struct sPatchResult result;
-	result.file = NULL;
+	result.file = nullptr;
 	
 	for (Uint32 i = 0; i < patch_count; i++)
 		if ((patches[i].fileid == fileid) && (patches[i].blockid == blockid)) {

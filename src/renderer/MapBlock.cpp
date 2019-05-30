@@ -361,7 +361,7 @@ cMapblock::cMapblock()
   blocky = 0;
   memset(heightmap, 0, sizeof heightmap);
   memset(groundids, 0, sizeof groundids);
-  int i, j;
+  unsigned char i, j;
   for (i = 0; i < 8; i++)
 	for (j = 0; j < 8; j++) {
 		custom_stretched[i][j] = NULL;
@@ -372,7 +372,7 @@ cMapblock::cMapblock()
 
 cMapblock::~cMapblock()
 {
-  int i, j;
+    unsigned char i, j;
   for (i = 0; i < 8; i++)
 	for (j = 0; j < 8; j++) 
 		if (custom_stretched[i][j]) 
@@ -380,7 +380,7 @@ cMapblock::~cMapblock()
 }
 
 
-void CreateObject(cEntity *object, unsigned int x, unsigned int y,
+static void CreateObject(cEntity *object, unsigned int x, unsigned int y,
 		  int z, unsigned int tileid)
 {
   object->x = x % 8;
@@ -407,7 +407,7 @@ void CreateObject(cEntity *object, unsigned int x, unsigned int y,
   }
 }
 
-void ExtractCell (struct MulCell * cell, Sint8 * heightmap, Uint16 * groundid) {
+static inline void ExtractCell (struct MulCell * cell, Sint8 * heightmap, Uint16 * groundid) {
 	if (heightmap)
 		*heightmap = cell->z;
 	if (groundid)
@@ -416,7 +416,6 @@ void ExtractCell (struct MulCell * cell, Sint8 * heightmap, Uint16 * groundid) {
 
 bool cMapblock::Generate(int blockx, int blocky)
 {
-  int i, j;
   if (!pMapLoader || !pTextureBuffer)
   	return false;
   struct MulBlock block;
@@ -425,106 +424,108 @@ bool cMapblock::Generate(int blockx, int blocky)
   this->blocky = blocky;
 
 
-  int x, y;
+  unsigned char xc, yc;
   
   pMapLoader->LoadMapBlock(blockx, blocky, &block);
-  for (y = 0; y < 8; y++)
-    for (x = 0; x < 8; x++) 
-      ExtractCell(&block.cells[y][x], &heightmap[y][x], &groundids[y][x]);
+  for (yc = 0; yc < 8; ++yc)
+    for (xc = 0; xc < 8; ++xc) 
+      ExtractCell(&block.cells[yc][xc], &heightmap[yc][xc], &groundids[yc][xc]);
     
   pMapLoader->LoadMapBlock(blockx + 1, blocky, &block);
-  for (y = 0; y < 8; y++)
-    for (x = 0; x < 2; x++)
-      ExtractCell(&block.cells[y][x], &heightmap[y][8 + x], NULL);
+  for (yc = 0; yc < 8; ++yc)
+    for (xc = 0; xc < 2; ++xc)
+      ExtractCell(&block.cells[yc][xc], &heightmap[yc][8 + xc], NULL);
 
   pMapLoader->LoadMapBlock(blockx, blocky + 1, &block);
-  for (y = 0; y < 2; y++)
-    for (x = 0; x < 8; x++)
-      ExtractCell(&block.cells[y][x], &heightmap[8+y][x], NULL);
+  for (yc = 0; yc < 2; ++yc)
+    for (xc = 0; xc < 8; ++xc)
+      ExtractCell(&block.cells[yc][xc], &heightmap[8+yc][xc], NULL);
 
   pMapLoader->LoadMapBlock(blockx + 1, blocky + 1, &block);
-  for (y = 0; y < 2; y++)
-    for (x = 0; x < 2; x++)
-  ExtractCell(&block.cells[y][x], &heightmap[8+y][8+x], NULL); 
+  for (yc = 0; yc < 2; ++yc)
+    for (xc = 0; xc < 2; ++xc)
+  ExtractCell(&block.cells[yc][xc], &heightmap[8+yc][8+xc], NULL); 
 
+  for (xc = 0; xc < 10; ++xc)
+	for (yc = 0; yc < 10; ++yc) {
+		const int z = ((Sint32) heightmap[xc][yc]) *4;
+		const int d_x = ((7-xc)+yc) *22;
+		const int d_y = (yc-(7-xc)) *22 - z - 44;
+		ground_draw_pos[xc][yc][0] = d_x;
+		ground_draw_pos[xc][yc][1] = d_y;
+		/*
+        if (xc < 8 && yc < 8) {
+		
+		}
+        */
+  }
+  
+  /*
+  for (xc = 0; xc < 9; ++xc)
+	for (yc = 0; yc < 9; ++yc) {
+	   int y2 = ground_draw_pos[xc][yc][1] - ground_draw_pos[xc+1][yc][1];
+	   int y3 = ground_draw_pos[xc+1][yc+1][1] - ground_draw_pos[xc+1][yc][1];
+	   alpha_values[xc][yc] = 30000.0f / (float) (y2 * y2 + y3 * y3 + 1) - 60.0f;
+       if (alpha_values[xc][yc] > 10.0f) alpha_values[xc][yc] = 10.0f;
+       if (alpha_values[xc][yc] < -50.0f) alpha_values[xc][yc] = -50.0f;
+  }
+  */
 
   int min_x = 1000000;
   int max_x = -1000000;
   int min_y = 1000000;
   int max_y = -1000000;
-  
-  
-  for (i = 0; i < 10; i++)
-	for (j = 0; j < 10; j++) {
-		int z = ((Sint32) heightmap[i][j]) *4;
-		int d_x = ((7-i)+j) *22;
-		int d_y = y +(j-(7-i))*22 - z - 44;
-		ground_draw_pos[i][j][0] = d_x;
-		ground_draw_pos[i][j][1] = d_y;
-		if (i < 8 && j < 8) {
-		
-		}
-  }
-  
-  for (i = 0; i < 9; i++)
-	for (j = 0; j < 9; j++) {
-	   int y2 = ground_draw_pos[i][j][1] - ground_draw_pos[i+1][j][1];
-	   int y3 = ground_draw_pos[i+1][j+1][1] - ground_draw_pos[i+1][j][1];
-	   alpha_values[i][j] = 30000.0f / (float) (y2 * y2 + y3 * y3 + 1) - 60.0f;
-       if (alpha_values[i][j] > 10.0f) alpha_values[i][j] = 10.0f;
-       if (alpha_values[i][j] < -50.0f) alpha_values[i][j] = -50.0f;
-  }
 
-  for (i = 0; i < 8; i++)
-	for (j = 0; j < 8; j++) {
+  for (xc = 0; xc < 8; ++xc)
+	for (yc = 0; yc < 8; ++yc) {
 		cGroundObject * object = objects.AddGround();
-		object->x = j;
-		object->y = i;
-		object->z = heightmap[i][j];
+		object->x = yc;
+		object->y = xc;
+		object->z = heightmap[xc][yc];
 		object->blockx = blockx;
 		object->blocky = blocky;
-		object->tileid = groundids[i][j];
-		object->draw_x = ground_draw_pos[i][j][0];
-		object->draw_y = ground_draw_pos[i][j][1];
+		object->tileid = groundids[xc][yc];
+		object->draw_x = ground_draw_pos[xc][yc][0];
+		object->draw_y = ground_draw_pos[xc][yc][1];
 		object->stretch = 1;
 		object->hue = 0;
 		
-/*	int level = heightmap[i][j];
-	Texture * texture = pTextureBuffer->GetGroundTexmap(groundids[i][j]);
-	if ((heightmap[i][j+1] != level) || (heightmap[i+1][j+1] != level) || (heightmap[i+1][j] != level) || true) {
+/*	int level = heightmap[xc][yc];
+	Texture * texture = pTextureBuffer->GetGroundTexmap(groundids[xc][yc]);
+	if ((heightmap[i][yc+1] != level) || (heightmap[i+1][yc+1] != level) || (heightmap[i+1][yc] != level) || true) {
 		if (texture && texture->GetSurface()) {
 //		   printf("----\n");
-//		   printf("%i %i | %i %i | %i %i | %i %i\n", ground_draw_pos[i][j][0], ground_draw_pos[i][j][1], ground_draw_pos[i+1][j][0], ground_draw_pos[i+1][j][1], ground_draw_pos[i][j+1][0], ground_draw_pos[i][j+1][1], ground_draw_pos[i+1][j+1][0], ground_draw_pos[i+1][j+1][1]);
-//			object->surface = GetStretchedSurface(ground_draw_pos[i][j], ground_draw_pos[i][j+1],ground_draw_pos[i+1][j+1], ground_draw_pos[i+1][j], hotspots[i][j], texture->GetSurface());
-//			object->surface = GetStretchedSurface(heightmap[i][j] - heightmap[i+1][j],heightmap[i+1][j+1] - heightmap[i+1][j],heightmap[i][j+1]- heightmap[i+1][j], hotspots[i][j], texture->GetSurface());
+//		   printf("%i %i | %i %i | %i %i | %i %i\n", ground_draw_pos[xc][yc][0], ground_draw_pos[xc][yc][1], ground_draw_pos[xc+1][yc][0], ground_draw_pos[xc+1][yc][1], ground_draw_pos[xc][yc+1][0], ground_draw_pos[xc][yc+1][1], ground_draw_pos[xc+1][yc+1][0], ground_draw_pos[xc+1][yc+1][1]);
+//			object->surface = GetStretchedSurface(ground_draw_pos[xc][yc], ground_draw_pos[xc][yc+1],ground_draw_pos[xc+1][yc+1], ground_draw_pos[xc+1][yc], hotspots[xc][yc], texture->GetSurface());
+//			object->surface = GetStretchedSurface(heightmap[xc][yc] - heightmap[xc+1][yc],heightmap[xc+1][yc+1] - heightmap[xc+1][yc],heightmap[xc][yc+1]- heightmap[xc+1][yc], hotspots[xc][yc], texture->GetSurface());
             int alphas[4];
-            alphas[0] = (int)alpha_values[i][j];
-            alphas[1] = (int)alpha_values[i+1][j];
-            alphas[2] = (int)alpha_values[i][j+1];
-            alphas[3] = (int)alpha_values[i+1][j+1];
+            alphas[0] = (int)alpha_values[xc][yc];
+            alphas[1] = (int)alpha_values[xc+1][yc];
+            alphas[2] = (int)alpha_values[xc][yc+1];
+            alphas[3] = (int)alpha_values[xc+1][yc+1];
             
-//			object->surface = GetStretchedSurface(ground_draw_pos[i][j][1] - ground_draw_pos[i+1][j][1],ground_draw_pos[i+1][j+1][1] - ground_draw_pos[i+1][j][1],ground_draw_pos[i][j+1][1] - ground_draw_pos[i+1][j][1], hotspots[i][j], alphas, texture->GetSurface());
-			//custom_stretched[i][j] = texture->GetSurface();
+//			object->surface = GetStretchedSurface(ground_draw_pos[xc][yc][1] - ground_draw_pos[xc+1][yc][1],ground_draw_pos[xc+1][yc+1][1] - ground_draw_pos[xc+1][yc][1],ground_draw_pos[xc][yc+1][1] - ground_draw_pos[xc+1][yc][1], hotspots[xc][yc], alphas, texture->GetSurface());
+			//custom_stretched[xc][yc] = texture->GetSurface();
 			} */
-	int w = 44; 
-	int h = 44; 
+	static constexpr int landtile_w = 44; 
+    static constexpr int landtile_h = 44; 
 		if (object->draw_x < min_x) 
 			min_x = object->draw_x;
 		if (object->draw_y < min_y) 
 			min_y = object->draw_y;
-		if (object->draw_x + w > max_x) 
-			max_x = object->draw_x + w;
-		if (object->draw_y + h > max_y) 
-			max_y = object->draw_y + h; 
+		if (object->draw_x + landtile_w > max_x) 
+			max_x = object->draw_x + landtile_w;
+		if (object->draw_y + landtile_h > max_y) 
+			max_y = object->draw_y + landtile_h; 
 	
   }
   
   int staticcount = 0;
   struct staticinfo * statics = pMapLoader->LoadStatics(blockx, blocky, staticcount);
   struct staticinfo * statics_p = statics;
-  x = blockx * 8; y = blocky * 8;
+  int x = blockx * 8, y = blocky * 8;
   
-     for (i = 0; i < staticcount; i++)
+     for (int istatic = 0; istatic < staticcount; ++istatic)
   	{
 			cEntity * object;
    			if (((statics_p->TileID >= 6038) && (statics_p->TileID <= 6066))) {
@@ -555,7 +556,7 @@ bool cMapblock::Generate(int blockx, int blocky)
 				max_y = object->draw_y + object->h;
 			
 		
-		statics_p ++;
+		++statics_p;
 	} 
 	
   outbox.x = min_x;

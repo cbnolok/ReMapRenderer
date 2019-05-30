@@ -110,7 +110,7 @@ else (WIN32)
 endif (WIN32)
 
 if (MSVC)
-    set (CMAKE_CXX_FLAGS "/O2 /EHsc /MP")
+    set (CMAKE_CXX_FLAGS "/O2 /EHsc /Oy /MP")
 else (MSVC)
     set(CMAKE_CXX_FLAGS "-s -O3")
 endif(MSVC)
