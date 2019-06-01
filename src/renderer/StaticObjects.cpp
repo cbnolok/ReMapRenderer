@@ -42,8 +42,11 @@ cGroundObject * StaticObjectList::AddGround(void) {
     return result;
 }
 
-static inline bool TestObject (cEntity * object1, cEntity * object2)
+static inline bool TestObject (const cEntity * object1, const cEntity * object2)
 {
+#define HAS_TF(x,y)     (x->tiledata_flags & y)
+#define DIFFERENT_TF(y) (HAS_TF(object1,y) != HAS_TF(object2,y))
+#define TF_1BELOW(y)    (!HAS_TF(object1, y) && HAS_TF(object2, y))
     if (object1->tileclass != object2->tileclass)
         return (object1->tileclass < object2->tileclass);
     if (object1->x != object2->x)
@@ -52,9 +55,16 @@ static inline bool TestObject (cEntity * object1, cEntity * object2)
         return (object1->y < object2->y);
     if (object1->z != object2->z)
         return (object1->z < object2->z);
+    if (DIFFERENT_TF(TDStaticFlag::Foliage))
+        return TF_1BELOW(TDStaticFlag::Foliage);
+    //if (DIFFERENT_TF(TDStaticFlag::Background))   // don't, since it generates artifacts with items on the same position of a floor tile
+    //    return TF_1BELOW(TDStaticFlag::Background);
     if (object1->height != object2->height)
-        return object1->height < object2->height;
+        return (object1->height < object2->height);
     return false;
+#undef HAS_TF
+#undef DIFFERENT_TF
+#undef TF_1BELOW
 }
 
 void StaticObjectList::Sort(void) {
