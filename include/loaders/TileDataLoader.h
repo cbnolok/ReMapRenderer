@@ -30,13 +30,13 @@
 class cTileDataLoader
 {
 private:
-	std::ifstream * tiledatafile;
+    std::ifstream * tiledatafile;
     bool highseas;
-   
+
 public:
     cTileDataLoader (std::string filename);
-   ~cTileDataLoader ();
-	bool LoadEntry (unsigned int index, struct TileDataStaticEntry * entry);
+    ~cTileDataLoader ();
+    bool LoadEntry (unsigned int index, struct TileDataStaticEntry * entry);
 };
 
 extern cTileDataLoader * pTileDataLoader;

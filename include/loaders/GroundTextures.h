@@ -23,13 +23,7 @@
 #ifndef _GROUNDTEXTURES_H_
 #define _GROUNDTEXTURES_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include <iostream>
 #include <fstream>
-#include <cstring>
 #include "include.h"
 #include "../renderer/Texture.h"
 

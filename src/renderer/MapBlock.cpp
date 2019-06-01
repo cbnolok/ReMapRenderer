@@ -3,11 +3,11 @@
 // Created by: Alexander Oster - tensor@ultima-iris.de
 //
 
+#include <cmath>
 #include <iostream>
 #include "renderer/MapBlock.h"
 #include "Debug.h"
 #include "include.h"
-#include "math.h"
 #include "Config.h"
 #include "uotype.h"
 #include "loaders/Map.h"

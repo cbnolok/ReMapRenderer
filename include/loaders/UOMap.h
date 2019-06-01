@@ -23,41 +23,36 @@
 #ifndef _UOMAP_H_
 #define _UOMAP_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include "SDL/SDL.h"
 #include <fstream>
 #include "../uotype.h"
 #include "Map.h"
 #include "MapPatches.h"
 
 
-class UOMapLoader : public MapLoader
+class UOMapLoader: public MapLoader
 {
 private:
     std::ifstream * mapstream;
-   std::ifstream * staticstream;
-   std::ifstream * staidxstream;
-   int width, height;
+    std::ifstream * staticstream;
+    std::ifstream * staidxstream;
+    int width, height;
 
-   UOMapPatches * patches;
+    UOMapPatches * patches;
 
 
 public:
-   UOMapLoader (const char * mapfile, const char * staticfile, const char * staidx, int widthblocks, int heightblocks);
-   virtual ~UOMapLoader ();
+    UOMapLoader (const char * mapfile, const char * staticfile, const char * staidx, int widthblocks, int heightblocks);
+    virtual ~UOMapLoader ();
 
-   void	LoadMapBlock( int x, int y, MulBlock *block );
-   struct staticinfo * LoadStatics(int x, int y, int &len);
+    void	LoadMapBlock(int x, int y, MulBlock *block);
+    struct staticinfo * LoadStatics(int x, int y, int &len);
 
 
-   unsigned int AddObject(unsigned int x, unsigned int y, int z, unsigned int tileid);
-   unsigned int DelObject(unsigned int blockx, unsigned int blocky, unsigned int obj_id);
+    unsigned int AddObject(unsigned int x, unsigned int y, int z, unsigned int tileid);
+    unsigned int DelObject(unsigned int blockx, unsigned int blocky, unsigned int obj_id);
 
-   void Save(char * filename);
-   void Load(char * filename);
+    void Save(char * filename);
+    void Load(char * filename);
 };
 
 

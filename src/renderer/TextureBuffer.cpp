@@ -15,14 +15,14 @@ TextureBuffer * pTextureBuffer = NULL;
 
 TextureBuffer::TextureBuffer()
 {
-  groundTiles.setMaxSize(nConfig::cache_ground);
-  groundTiles.setAutofree(true);
+    groundTiles.setMaxSize(nConfig::cache_ground);
+    groundTiles.setAutofree(true);
 
-  artTiles.setMaxSize(nConfig::cache_art);
-  artTiles.setAutofree(true);
-  
-  groundTexmaps.setMaxSize(nConfig::cache_texture);
-  groundTexmaps.setAutofree(true);
+    artTiles.setMaxSize(nConfig::cache_art);
+    artTiles.setAutofree(true);
+
+    groundTexmaps.setMaxSize(nConfig::cache_texture);
+    groundTexmaps.setAutofree(true);
 }
 
 TextureBuffer::~TextureBuffer()
@@ -32,76 +32,76 @@ TextureBuffer::~TextureBuffer()
 Texture *TextureBuffer::GetGroundTexture(int index)
 {
 
-  if ((index < 0) || (index >= 0x4000))
-  	return NULL;
+    if ((index < 0) || (index >= 0x4000))
+        return NULL;
 
-  Texture * result = groundTiles.findEntry(index);
+    Texture * result = groundTiles.findEntry(index);
 
-  if(!result) {
-    if (!pGroundTextureLoader)
-    	return NULL;
-	
-    result = NULL;//pGroundTextureLoader->LoadTexture(index);
-    
     if (!result) {
-    	if (!pArtLoader)
-    		return NULL;
-	result = pArtLoader->LoadArt(index);
-    }
-    
-    if (!result)
-    	result = new Texture(index);
-    groundTiles.addEntry(index, result);
-  }
+        if (!pGroundTextureLoader)
+            return NULL;
 
-  return result;
+        result = NULL;//pGroundTextureLoader->LoadTexture(index);
+
+        if (!result) {
+            if (!pArtLoader)
+                return NULL;
+            result = pArtLoader->LoadArt(index);
+        }
+
+        if (!result)
+            result = new Texture(index);
+        groundTiles.addEntry(index, result);
+    }
+
+    return result;
 }
 
 Texture *TextureBuffer::GetArtTexture(int index)
 {
-  if ((index < 0x4000) && (index >= 0))
-  	return GetGroundTexture(index);
-  
-  if ((index < 0x0) || (index >= tiledataMaxID))
-  	return NULL;
-  
-  Texture *result = NULL;
+    if ((index < 0x4000) && (index >= 0))
+        return GetGroundTexture(index);
 
-  result = artTiles.findEntry(index);
+    if ((index < 0x0) || (index >= tiledataMaxID))
+        return NULL;
 
-  if(!result) {
+    Texture *result = NULL;
 
-    if (!pArtLoader)
-    	return NULL;
-	
-    result = pArtLoader->LoadArt(index);
+    result = artTiles.findEntry(index);
+
     if (!result) {
-    	result = new Texture(index);
-    }
-    artTiles.addEntry(index, result);
-  }
 
-  return result;
+        if (!pArtLoader)
+            return NULL;
+
+        result = pArtLoader->LoadArt(index);
+        if (!result) {
+            result = new Texture(index);
+        }
+        artTiles.addEntry(index, result);
+    }
+
+    return result;
 }
 
 Texture *TextureBuffer::GetGroundTexmap(int index)
 {
 
-  if ((index < 0) || (index >= 0x4000))
-  	return NULL;
+    if ((index < 0) || (index >= 0x4000))
+        return NULL;
 
-  Texture * result = groundTexmaps.findEntry(index);
+    Texture * result = groundTexmaps.findEntry(index);
 
-  if(!result) {
-    if (!pGroundTextureLoader)
-    	return NULL;
-	
-    result = pGroundTextureLoader->LoadTexture(index);
-    
-    if (!result)
-    	result = new Texture(index);
-    groundTexmaps.addEntry(index, result);
-  }
+    if (!result) {
+        if (!pGroundTextureLoader)
+            return NULL;
 
-  return result;
+        result = pGroundTextureLoader->LoadTexture(index);
+
+        if (!result)
+            result = new Texture(index);
+        groundTexmaps.addEntry(index, result);
+    }
+
+    return result;
 }

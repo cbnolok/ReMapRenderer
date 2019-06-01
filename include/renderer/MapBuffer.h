@@ -23,38 +23,30 @@
 #ifndef _MAPBUFFER_H_
 #define _MAPBUFFER_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
 
-#include "../include.h"
 #include "MapBlock.h"
-#include "SDL/SDL.h"
 #include <map>
 #include <vector>
 
 
-class cMapbuffer 
+class cMapbuffer
 {
 private:
-	typedef std::map<Uint32, cMapblock *>	MapBuffer_t;
- MapBuffer_t	root;
- std::vector<cMapblock *>  cache;
+    typedef std::map<Uint32, cMapblock *>	MapBuffer_t;
+    MapBuffer_t	root;
+    std::vector<cMapblock *>  cache;
 
 public:
     cMapbuffer ();
-   ~cMapbuffer ();
+    ~cMapbuffer ();
 
-   void Clear();
-   int GetCount(void);
+    void Clear();
+    //int GetCount(void) const     { return objectlist.size(); }
 
-   cMapblock * Get (int x, int y);
-   void Add(cMapblock * block);
-   cMapblock * CreateBlock (int x, int y);
-   void FreeBuffer(int blockx, int blocky, int radius);
-
-protected:
-
+    cMapblock * Get (int x, int y);
+    void Add(cMapblock * block);
+    cMapblock * CreateBlock (int x, int y);
+    void FreeBuffer(int blockx, int blocky, int radius);
 };
 
 extern	cMapbuffer	* pMapbuffer;

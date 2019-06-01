@@ -23,15 +23,7 @@
 #ifndef _VERDATALOADER_H_
 #define _VERDATALOADER_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include "SDL/SDL.h"
-
-#include <iostream>
 #include <fstream>
-#include <cstring>
 #include "include.h"
 
 #include "../uotype.h"

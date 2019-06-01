@@ -23,10 +23,6 @@
 #ifndef _STATICOBJECTS_H_
 #define _STATICOBJECTS_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
 #include "SDL/SDL.h"
 
 #include <vector>
@@ -89,15 +85,16 @@ public:
 
    void Clear (void);
    
-   void InsertDynamic (cStaticObject * object);
-   void DeleteDynamic (Uint32 id);
    cStaticObject * AddStatic ();
    cGroundObject * AddGround ();
+   /*
+   void InsertDynamic (cStaticObject * object);
+   void DeleteDynamic (Uint32 id);
+   */
 
 
    objectlist_t * GetList(void) { return &objectlist; }
-   
-   int GetCount(void) { return objectlist.size(); }
+   //int GetCount(void) const     { return objectlist.size(); }
    
    void Sort();
 

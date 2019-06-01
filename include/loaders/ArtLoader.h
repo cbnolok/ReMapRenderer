@@ -23,13 +23,7 @@
 #ifndef _ARTLOADER_H_
 #define _ARTLOADER_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include <iostream>
 #include <fstream>
-#include <cstring>
 #include "include.h"
 #include "../renderer/Texture.h"
 
@@ -37,20 +31,20 @@
 class cArtLoader
 {
 private:
-	std::ifstream * artfile;
-	std::ifstream * artindex;
-   
-   Texture * LoadGroundArt(int index);
-   Texture * LoadStaticArt(int index);
- 
+    std::ifstream * artfile;
+    std::ifstream * artindex;
+
+    Texture * LoadGroundArt(int index);
+    Texture * LoadStaticArt(int index);
+
 public:
     cArtLoader (std::string filename, std::string indexname);
-   ~cArtLoader ();
-   
-   Texture * LoadArt(int index);
+    ~cArtLoader ();
+
+    Texture * LoadArt(int index);
 
 protected:
-	unsigned int art_count;
+    unsigned int art_count;
 };
 
 extern cArtLoader * pArtLoader;

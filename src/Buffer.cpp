@@ -6,7 +6,7 @@
 #include "Buffer.h"
 #include "Debug.h"
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 
 using namespace std;

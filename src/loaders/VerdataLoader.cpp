@@ -3,11 +3,11 @@
 // Created by:  Alexander Oster - tensor@ultima-iris.de
 //
 
+#include <cstring>
+#include <iostream>
 #include "loaders/VerdataLoader.h"
 #include "Debug.h"
 #include "uotype.h"
-#include <string.h>
-#include <iostream>
 
 using namespace std;
 
@@ -58,7 +58,7 @@ struct sPatchResult cVerdataLoader::FindPatch (unsigned int fileid, unsigned int
 	struct sPatchResult result;
 	result.file = nullptr;
 	
-	for (Uint32 i = 0; i < patch_count; i++)
+	for (unsigned i = 0; i < patch_count; ++i)
 		if ((patches[i].fileid == fileid) && (patches[i].blockid == blockid)) {
 			result.index.offset = patches[i].start;
 			result.index.length = patches[i].len;

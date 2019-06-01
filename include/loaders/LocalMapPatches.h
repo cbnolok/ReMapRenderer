@@ -23,54 +23,39 @@
 #ifndef _LOCALMAPPATCHES_H_
 #define _LOCALMAPPATCHES_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include "SDL/SDL.h"
-#include <iostream>
 #include <fstream>
-#include <cstring>
 #include "../uotype.h"
-#include "Map.h"
-#include "../Debug.h"
 #include "MapPatches.h"
 
 
 struct PatchEntry {
-	struct StaticPatch patch;
-	struct PatchEntry * next;
+    struct StaticPatch patch;
+    struct PatchEntry * next;
 } STRUCT_PACKED;
 
 
-
-class LocalMapPatches : public UOMapPatches
+class LocalMapPatches: public UOMapPatches
 {
 private:
-	struct PatchEntry * root;
-	int count;
-
+    struct PatchEntry * root;
+    int count;
 
 public:
+    LocalMapPatches ();
+    virtual ~LocalMapPatches ();
 
-   LocalMapPatches ();
-   virtual ~LocalMapPatches ();
+    void Clear();
+    void AddPatch(struct StaticPatch patch);
+    void DelPatch(unsigned int blockx, unsigned int blocky, unsigned int obj_id);
+    int GetNewID(int blockx, int blocky);
 
-   void Clear();
-   void AddPatch(struct StaticPatch patch);
-   void DelPatch(unsigned int blockx, unsigned int blocky, unsigned int obj_id);
-   int GetNewID(int blockx, int blocky);
+    StaticPatch * GetPatch(unsigned int blockx, unsigned int blocky, unsigned int objid);
+    int GetNewStaticSize(int orig_count, unsigned int blockx, unsigned int blocky, bool &apply_needed);
 
-   StaticPatch * GetPatch(unsigned int blockx, unsigned int blocky, unsigned int objid);
-   int GetNewStaticSize(int orig_count, unsigned int blockx, unsigned int blocky, bool &apply_needed);
+    void ApplyPatch(unsigned int blockx, unsigned int blocky, unsigned int oldcount, unsigned int newcount, struct staticinfo * src, struct staticinfo * dst);
 
-   void ApplyPatch(unsigned int blockx, unsigned int blocky, unsigned int oldcount, unsigned int newcount, struct staticinfo * src, struct staticinfo * dst);
-
-   int Load (char * filename);
-   int Save (char * filename);
-
-
-
+    int Load (char * filename);
+    int Save (char * filename);
 };
 
 

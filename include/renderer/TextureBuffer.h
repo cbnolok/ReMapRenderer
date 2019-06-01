@@ -23,10 +23,8 @@
 #ifndef _TEXTUREBUFFER_H_
 #define _TEXTUREBUFFER_H_
 
-#include "SDL/SDL.h"
 #include "Texture.h"
 #include "../Cache.h"
-#include "../Buffer.h"
 
 class TextureBuffer  
 {
