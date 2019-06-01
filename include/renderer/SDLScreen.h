@@ -50,32 +50,14 @@ public:
    ~SDLScreen ();
 
   int Init (int width, int height, int bpp);
-  void ToggleFullScreen ();
-  void ClearScreen ();
-  void ClearZBuffer ();
-  int DrawGL (void);
   SDL_Surface *screen;
   int videoFlags;
-  int GetTextWidth(char * text, int font);
-  
-  void DrawSurface (SDL_Surface * surface, int x, int y);
-  
-  bool do_redraw;
-  void CheckUpdate();
-  
-  std::list<Uint32> update_times;
-  void DoUpdate (Uint32 time);
   
   void Save (char * filename) {
     SDL_SaveBMP(screen, filename);
   }
-  
-  
-protected:
-
 };
 
 extern float BilinearTable[32][32][4];
-extern void CalcBilinearTable ();
 
 #endif //_SDLSCREEN_H_

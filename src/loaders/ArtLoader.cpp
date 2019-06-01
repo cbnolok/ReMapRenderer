@@ -35,8 +35,8 @@ cArtLoader::cArtLoader (std::string filename, std::string indexname)
       return;
     }
     
-    errstr = "Could not load ground texture file: ";
     if (!artfile->is_open()) {
+    errstr = "Could not load ground texture file: ";
 	errstr += filename;
 	pDebug.Log((char *)errstr.c_str(), __FILE__, __LINE__, LEVEL_ERROR);
 	delete artfile;

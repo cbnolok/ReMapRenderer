@@ -35,8 +35,9 @@ cGroundTextureLoader::cGroundTextureLoader (std::string filename, std::string in
       return;
     }
     
-    errstr = "Could not load ground texture file: ";
+    
     if (!texmapsfile->is_open()) {
+    errstr = "Could not load ground texture file: ";
 	errstr += filename;
 	pDebug.Log((char *)errstr.c_str(), __FILE__, __LINE__, LEVEL_ERROR);
 	delete texmapsfile;

@@ -50,6 +50,8 @@ void Game::LoadMuls(std::string mulpath)
 		if ((last_char != '/') && (last_char != '\\'))
 			mulpath += "/";
 	}
+
+    // TODO: support map indexes from 0 to 5. Add xml entry for map index to render.
 	
 	string mul_map0 = mulpath+"map0.mul";
 	string mul_statics0 = mulpath+"statics0.mul";

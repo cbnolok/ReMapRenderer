@@ -5,7 +5,7 @@
 namespace	nConfig
 {
 	// GFX
-	extern	int		width, height, bpp, startfullscreen;
+	extern	int		width, height, bpp;
 
 	// UO	
 	extern int startx, starty, startz;
@@ -17,10 +17,6 @@ namespace	nConfig
 	extern int cache_block;
 	extern std::string output;
 	extern std::string patches;
-	
-	// NET
-	extern std::string server, login, password;
-	extern int serverport;
 	
 	// Function
 	bool	Init();

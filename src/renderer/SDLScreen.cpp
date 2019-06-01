@@ -7,12 +7,11 @@
 #include "Config.h"
 
 
-int flag_cullbackfaces = 0;
 int texture_mem = 0;
 
 float BilinearTable[32][32][4];
 
-void CalcBilinearTable ()
+static void CalcBilinearTable ()
 {   
     float fracx, fracy;
     for (int y = 0; y < 32; y++)
@@ -32,7 +31,6 @@ SDLScreen::SDLScreen()
   act_alpha = 255;
   light_factor = 1.0f;
   screen = NULL;
-  do_redraw = false;
   act_update = SDL_GetTicks();
 //  nConfig::width = (nConfig::maxblockx - nConfig::minblockx + 2) * 176 * 2;
 //  nConfig::height = (nConfig::maxblocky - nConfig::minblocky + 2) * 176 * 2;
@@ -66,10 +64,6 @@ int SDLScreen::Init(int width, int height, int bpp)
   videoFlags = 0;	/* Enable OpenGL in SDL */
 //  videoFlags |= SDL_GL_DOUBLEBUFFER;	/* Enable double buffering */
   videoFlags |= SDL_HWPALETTE;	/* Store the palette in hardware */
-  if(nConfig::startfullscreen)
-    videoFlags |= SDL_FULLSCREEN;
-
-  //videoFlags |= SDL_RESIZABLE;        /* Enable window resizing */
 
   /* This checks to see if surfaces can be stored in memory */
   if(videoInfo->hw_available) {
@@ -96,96 +90,8 @@ int SDLScreen::Init(int width, int height, int bpp)
   	if(!screen) {
     		cerr << "Video mode set failed: " << SDL_GetError() << endl;
     		exit(1);
-  	}
-
-  	/* Enable key repeat */
-  	if((SDL_EnableKeyRepeat
-      		(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL))) {
-    		cerr << "Setting keyboard repeat failed: " << SDL_GetError() << endl;
-    		exit(1);
-  	}
-	
-
-  SDL_EnableUNICODE(1);
+  	}	
   
   return true;
-}
-
-
-void SDLScreen::ToggleFullScreen()
-{
-  if (!screen)
-  	return;
-
-  SDL_WM_ToggleFullScreen(screen);
-}
-
-void SDLScreen::ClearScreen()
-{
-  if (!screen)
-  	return;
-  SDL_FillRect(screen, NULL, 0);
-  /* Clear The Screen And The Depth Buffer */
-//  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void SDLScreen::ClearZBuffer()
-{
-  if (!screen)
-  	return;
-  /* Clear The Depth Buffer */
-  //glClear(GL_DEPTH_BUFFER_BIT);
-}
-
-/* Blit the Screen*/
-
-int SDLScreen::DrawGL(void)
-{
-/*  if (!screen)
-  	return true;
-  DisplayFps();
-
-   glFinish();
- SDL_GL_SwapBuffers();
-//  glSwapBuffers();
-*/
-  return (true);
-}
-
-void SDLScreen::DrawSurface (SDL_Surface * surface, int x, int y)
-{
-	if (!surface)
-		return;
-		
-	SDL_Rect rect;
-	rect.x = x;
-	rect.y = y;
-	rect.w = surface->w;
-	rect.h = surface->h;
-	if (screen)
-		SDL_BlitSurface(surface, NULL, screen, &rect);
-}
-
-void SDLScreen::CheckUpdate()
-  {
-    act_update = SDL_GetTicks();
-    list<Uint32>::iterator iter;
-    for (iter = update_times.begin(); iter != update_times.end(); iter++) {
-        if (*iter > act_update) {
-//                do_redraw = true;
-                update_times.erase(iter);
-                iter = update_times.begin();
-        }
-    }
-  }
-  
-void SDLScreen::DoUpdate (Uint32 time)
-  {
-    update_times.push_back(act_update + time);
-  } 
-
-int SDLScreen::GetTextWidth(char * text, int font)
-{
-    return 0; // NOTE: INCOMPLETE CODE!
 }
 

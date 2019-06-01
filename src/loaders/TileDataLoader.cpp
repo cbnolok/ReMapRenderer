@@ -14,8 +14,6 @@ cTileDataLoader * pTileDataLoader = NULL;
 
 cTileDataLoader::cTileDataLoader (std::string filename)
 {
-    string errstr;
-
     tiledatafile = new ifstream(filename.c_str(), ios::in | ios::binary);
     if(!tiledatafile) {
       pDebug.Log("Out of Memory in ArtLoader::ArtLoader", __FILE__, __LINE__,
@@ -23,16 +21,19 @@ cTileDataLoader::cTileDataLoader (std::string filename)
       return;
     }
     
-  
-    errstr = "Could not load ground tiledata file: ";
     if (!tiledatafile->is_open()) {
+    /*
+    string errstr;
+    errstr = "Could not load ground tiledata file: ";
 	errstr += filename;
 	pDebug.Log((char *)errstr.c_str(), __FILE__, __LINE__, LEVEL_ERROR);
+    */
 	delete tiledatafile;
 	tiledatafile = NULL;
 	return;
     }
  
+    // TODO: detect if tiledata is standard or HS
 }
 
 cTileDataLoader::~cTileDataLoader ()
@@ -42,6 +43,7 @@ cTileDataLoader::~cTileDataLoader ()
 
 bool cTileDataLoader::LoadEntry (Uint32 index, struct TileDataStaticEntry * entry)
 {
+    // TODO: different max index for hs or non hs entry
   if ((index >= 49152) || !entry || !tiledatafile)
     return false;
 

@@ -19,33 +19,17 @@
 
 using namespace std;
 
-extern SDLScreen *SDLscreen;
 
-Uint32 getAnimationBase (Uint32 model)
+/*
+static void PutPixel(SDL_Surface * screen, Sint32 X, Sint32 Y, int len, SDL_Surface * texture, float m_x, float m_y, float tex_y)
 {
-  if (model < 0xc8)
-    {
-      return model * 110;
-    }
-
-  if (model < 0x190)
-    {
-      return (model - 0x0C8) * 65 + 22000;
-    }
-
-  return (model - 0x190) * 175 + 35000;
-}
-
-void PutPixel(SDL_Surface * screen, Sint32 X, Sint32 Y, int len, SDL_Surface * texture, float m_x, float m_y, float tex_y)
-{
-    /* Code to set a yellow pixel at the center of the screen */
+    // Code to set a yellow pixel at the center of the screen
 
     Uint32   pixel;
     Uint8   *bits, bpp;
 
-    /* Map the color yellow to this display (R=0xFF, G=0xFF, B=0x00)
-       Note:  If the display is palettized, you must set the palette first.
-    */
+    // Map the color yellow to this display (R=0xFF, G=0xFF, B=0x00)
+    //   Note:  If the display is palettized, you must set the palette first.
     Uint32 op = 63;
     if (texture->h == 128)
     	op = 127;
@@ -56,7 +40,7 @@ void PutPixel(SDL_Surface * screen, Sint32 X, Sint32 Y, int len, SDL_Surface * t
     float tex_x = 0.0f;
     pixel = 0xff000000;//rand();//SDL_MapRGB(screen->format, 0xFF, 0xFF, 0x00);
 
-    /* Calculate the framebuffer offset of the center of the screen */
+    // Calculate the framebuffer offset of the center of the screen
     bpp = screen->format->BytesPerPixel;
     bits = ((Uint8 *)screen->pixels)+Y*screen->pitch+X*bpp;
     //if (p)
@@ -71,13 +55,15 @@ void PutPixel(SDL_Surface * screen, Sint32 X, Sint32 Y, int len, SDL_Surface * t
 	len --;
     } 
 
-    /* Update the display */
+    // Update the display
     //SDL_UpdateRect(screen, X, Y, 1, abs(len));
 
     return;
    }
-   
- void DrawHalfUpperTriangle(SDL_Surface * screen, int * up, float m1, float m2, int lines, SDL_Surface * texture, float t) 
+*/
+
+/*
+static void DrawHalfUpperTriangle(SDL_Surface * screen, int * up, float m1, float m2, int lines, SDL_Surface * texture, float t) 
  {
  	int i, j;
 	
@@ -106,8 +92,10 @@ void PutPixel(SDL_Surface * screen, Sint32 X, Sint32 Y, int len, SDL_Surface * t
 		q[0] += m2;
 	}
  }
+*/
 
- void DrawHalfLowerTriangle(SDL_Surface * screen, int * up, float m1, float m2, int lines, SDL_Surface * texture, float t) 
+/*
+ static void DrawHalfLowerTriangle(SDL_Surface * screen, int * up, float m1, float m2, int lines, SDL_Surface * texture, float t) 
  {
  	int i, j;
 	float p[2], q[2];
@@ -132,8 +120,10 @@ void PutPixel(SDL_Surface * screen, Sint32 X, Sint32 Y, int len, SDL_Surface * t
 		q[0] += m2;
 	}
  }
+*/
 
- void DrawTriangle(SDL_Surface * screen, int * p1, int * p2, int *p3, SDL_Surface * texture) 
+/*
+ static void DrawTriangle(SDL_Surface * screen, int * p1, int * p2, int *p3, SDL_Surface * texture) 
  {
  	
  	int * upper, *middle, *lower;
@@ -181,8 +171,9 @@ void PutPixel(SDL_Surface * screen, Sint32 X, Sint32 Y, int len, SDL_Surface * t
 		DrawHalfLowerTriangle(screen, lower, -m2, -m1, lower[1] - middle[1] + 1, texture, t);
 	}
  }
+*/
 
-SDL_Surface * CreateHuedSurface(SDL_Surface * surface, Uint16 HueID)
+static SDL_Surface * CreateHuedSurface(SDL_Surface * surface, Uint16 HueID)
 {
     if (!surface)
         return NULL;
@@ -210,16 +201,15 @@ static inline void LightenPixel(Uint32 * pixel, Sint16 value)
 {
     Uint8 * p = (Uint8 *) pixel;
     for (unsigned char i = 0; i < 3; ++i) {
-        Sint16 v = *p + value;
-        if (v < 0) v = 0;
-        else
-          if (v > 255) v = 255;
-        *p = v;        
+        short v = *p + value;
+        if      (v < 0)   v = 0;
+        else if (v > 255) v = 255;
+        *p = (Uint8)v;
         ++p;
     }   
 }
 
-int CalcStretchHeight(int y2, int y3, int y4, int & min_y)
+static int CalcStretchHeight(int y2, int y3, int y4, int & min_y)
 {
 int max_y = 0;
 min_y = 0;
@@ -234,8 +224,7 @@ if (y4 > max_y) max_y = y4;
 return max_y - min_y + 1;
 }
 
-//SDL_Surface * GetStretchedSurface (int *p1, int *p2, int *p3, int *p4, int * hotspot, SDL_Surface * texture)
-SDL_Surface * GetStretchedSurface (int y2, int y3, int y4, int * alphas, SDL_Surface * texture, int h, int min_y)
+static SDL_Surface * GetStretchedSurface (int y2, int y3, int y4, int * alphas, SDL_Surface * texture, int h, int min_y)
 {
 if (!texture)
     return NULL;
@@ -444,7 +433,7 @@ bool cMapblock::Generate(int blockx, int blocky)
   pMapLoader->LoadMapBlock(blockx + 1, blocky + 1, &block);
   for (yc = 0; yc < 2; ++yc)
     for (xc = 0; xc < 2; ++xc)
-  ExtractCell(&block.cells[yc][xc], &heightmap[8+yc][8+xc], NULL); 
+      ExtractCell(&block.cells[yc][xc], &heightmap[8+yc][8+xc], NULL); 
 
   for (xc = 0; xc < 10; ++xc)
 	for (yc = 0; yc < 10; ++yc) {
@@ -528,6 +517,7 @@ bool cMapblock::Generate(int blockx, int blocky)
      for (int istatic = 0; istatic < staticcount; ++istatic)
   	{
 			cEntity * object;
+            // TODO: max TileID changed with SA?
    			if (((statics_p->TileID >= 6038) && (statics_p->TileID <= 6066))) {
     			object = objects.AddGround();
 				CreateObject(object, x + statics_p->x, y + statics_p->y, 
@@ -577,7 +567,7 @@ void cMapblock::RenderGround(int x, int y, SDL_Surface * target, SDL_Rect * clip
 {
 	if (!pTextureBuffer || !target)
 		return;
-		if (((outbox.x + outbox.w + x) < 0) || ((outbox.y + outbox.h + y) < 0) || (outbox.x + x > 1023) || (outbox.y + y> 1023))
+		if (((outbox.x + outbox.w + x) < 0) || ((outbox.y + outbox.h + y) < 0) || (outbox.x + x > 1023) || (outbox.y + y > 1023))
 			return; 
 		
 	int i, j;

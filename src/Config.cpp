@@ -23,14 +23,6 @@ namespace nConfig {
   int width = 640;
   int height = 480;
   int bpp = 16;
-  int startfullscreen = 0;
-
-// Net related
-  string server = "localhost";
-  string login = "account";
-  string password = "password";
-  string output="output.bmp";
-  int serverport = 2593;
 
 // UO related
   int startx = 1500;
@@ -38,6 +30,7 @@ namespace nConfig {
   int startz = 0;
   string mulpath;
   string patches = "";
+  string output="output.bmp";
 
   int minblockx = 344; 
   int maxblockx = 364;
@@ -50,12 +43,12 @@ namespace nConfig {
   int maxy = 2680;
   
   // size in bytes
-  int cache_art = 500000;
+  int cache_art     = 50000;
   int cache_texture = 200000;
-  int cache_ground = 1000000;
+  int cache_ground  = 1000000;
 
   // number of blocks
-  int cache_block = 1000;
+  int cache_block = 200;
 
   int detail = 0;
 }
@@ -67,7 +60,6 @@ ParserData ParserInfo[] = {
 	ParserData("WIDTH", IS_INTEGER , &width),
 	ParserData("HEIGHT", IS_INTEGER , &height),
 	ParserData("BPP", IS_INTEGER , &bpp),
-	ParserData("FULLSCREEN", IS_INTEGER , &startfullscreen),
 	ParserData("UO", IS_SECTION , NULL),
 	ParserData("MINX", IS_INTEGER , &minx),
 	ParserData("MINY", IS_INTEGER , &miny),
@@ -84,11 +76,6 @@ ParserData ParserInfo[] = {
 	ParserData("CACHE_TEXTURE", IS_INTEGER , &cache_texture),
 	ParserData("CACHE_GROUND", IS_INTEGER , &cache_ground),
 	ParserData("CACHE_BLOCK", IS_INTEGER , &cache_block),
-	ParserData("NET", IS_SECTION , NULL),
-	ParserData("PORT", IS_INTEGER , &serverport),
-	ParserData("SERVER", IS_STRING , &server),
-	ParserData("LOGIN", IS_STRING , &login),
-	ParserData("PASSWORD", IS_STRING , &password),
 	ParserData("", IS_END , NULL)
 };
 namespace nConfig{

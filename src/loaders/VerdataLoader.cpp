@@ -27,11 +27,12 @@ cVerdataLoader::cVerdataLoader (std::string filename)
       return;
     }
     
-
-    errstr = "Could not load verdata file: ";
     if (!verdatafile->is_open()) {
+    /*
+    errstr = "Could not load verdata file: ";
 	errstr += filename;
 	pDebug.Log((char *)errstr.c_str(), __FILE__, __LINE__, LEVEL_ERROR);
+    */
 	delete verdatafile;
 	verdatafile = nullptr;
 	return;

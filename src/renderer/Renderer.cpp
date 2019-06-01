@@ -26,7 +26,6 @@ Renderer::Renderer()
 {
   flags = 0;
   view_distance = 6;
-  do_redraw = false;
   static_buffer = NULL;
   ground_buffer = NULL;
   cache_x = 0;
@@ -60,7 +59,6 @@ int Renderer::Init(void)
   static_buffer = SDL_CreateRGBSurface(SDL_SWSURFACE , cache_x * 176, cache_y * 176, 16, SDL_RGB_16_BITMASK);
   ground_buffer = SDL_CreateRGBSurface(SDL_SWSURFACE , cache_x * 176, cache_y * 176, 16, SDL_RGB_16_BITMASK);
   texture_mem += cache_x * 176 * cache_y * 176 * 2 * 2;
-  do_redraw = true;
   if (!static_buffer) {
 	pDebug.Log("Out of Memory in Renderer::Init ()", __FILE__, __LINE__, LEVEL_ERROR );
 	return false;
