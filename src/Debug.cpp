@@ -30,7 +30,7 @@ bool logToFile = true;
 bool logToFile = false;
 #endif
 
-void Debug::Log(char *message, char *filename, int line, int level)
+void Debug::Log(const char *message, char *filename, int line, int level)
 {
   // Ignore messages below our loglevel
   if(level < loglevel)
@@ -75,7 +75,7 @@ void Debug::Log(char *message, char *filename, int line, int level)
   }
 }
 
-void Debug::Log(char *message)
+void Debug::Log(const char *message)
 {
 
   // Dump the message out to a file

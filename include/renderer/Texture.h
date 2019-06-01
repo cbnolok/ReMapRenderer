@@ -34,11 +34,11 @@
 class Texture : public BufferEntry
 {
 private:
-
-  SDL_Surface * surface;
+  unsigned int _id;
+  SDL_Surface * _surface;
 
 public:
-    Texture ();
+    Texture (unsigned int id);
    ~Texture ();
 
    int LoadFromData( void * data, int width, int height, int bits_per_pixel);
@@ -49,7 +49,8 @@ public:
    int GetWidth ();
    int GetHeight ();
    
-   SDL_Surface * GetSurface () { return surface; }
+   SDL_Surface * GetSurface () { return _surface; }
+   unsigned int GetId() {return _id;}
    
 protected:
 

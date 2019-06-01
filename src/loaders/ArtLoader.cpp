@@ -108,7 +108,7 @@ Texture * cArtLoader::LoadGroundArt(int index)
   patch.file->seekg(idx.offset, ios::beg);
   patch.file->read((char *) imagecolors, 1024 * 2);
   
-  Texture * texture = new Texture;
+  Texture * texture = new Texture(index);
   texture->Create16(44, 44);
   SDL_Surface * surface = texture->GetSurface();
 //  Uint16 * data = new Uint16[44 * 44];
@@ -230,7 +230,7 @@ Texture * cArtLoader::LoadStaticArt(int index)
   
 //  Uint16 * lookuptable = new Uint16[height];
   if (width & 1) width ++;
-  Texture * texture = new Texture;
+  Texture * texture = new Texture(index);
   texture->Create16(width, height);
   SDL_Surface * surface = texture->GetSurface();
 //  Uint16 * data = new Uint16 [width * height];

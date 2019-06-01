@@ -104,7 +104,7 @@ Texture * cGroundTextureLoader::LoadTexture(int index)
 
   free(temp);
   
-  Texture * texture = new Texture;
+  Texture * texture = new Texture(index);
   if (texture) {
   	texture->LoadFromData(sprite, size, size, 32);
   	free(sprite);

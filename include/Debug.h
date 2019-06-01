@@ -44,9 +44,9 @@ public:
     Debug ();
    ~Debug ();
 
-   void Log(char * message, char * filename, int line, int level);
-   void Log(char * message);
-   void Log(std::string message) { Log ((char *) message.c_str()); }
+   void Log(const char * message, char * filename, int line, int level);
+   void Log(const char * message);
+   void Log(std::string const& message) { Log (message.c_str()); }
    int GetLoglevel(void);
    void SetLoglevel(int loglevel);
 

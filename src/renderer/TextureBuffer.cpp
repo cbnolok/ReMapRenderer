@@ -16,15 +16,12 @@ TextureBuffer * pTextureBuffer = NULL;
 TextureBuffer::TextureBuffer()
 {
   groundTiles.setMaxSize(nConfig::cache_ground);
-  groundTiles.setCacheSize(0x4000);
   groundTiles.setAutofree(true);
 
   artTiles.setMaxSize(nConfig::cache_art);
-  artTiles.setCacheSize(0x4000);
   artTiles.setAutofree(true);
   
   groundTexmaps.setMaxSize(nConfig::cache_texture);
-  groundTexmaps.setCacheSize(0x4000);
   groundTexmaps.setAutofree(true);
 }
 
@@ -53,7 +50,7 @@ Texture *TextureBuffer::GetGroundTexture(int index)
     }
     
     if (!result)
-    	result = new Texture;
+    	result = new Texture(index);
     groundTiles.addEntry(index, result);
   }
 
@@ -66,12 +63,12 @@ Texture *TextureBuffer::GetArtTexture(int index)
   if ((index < 0x4000) && (index >= 0))
   	return GetGroundTexture(index);
   
-  if ((index < 0x0) || (index >= 65536))
+  if ((index < 0x0) || (index >= 0x7FFFF)) // TODO: or lower, if tiledata is not SA?
   	return NULL;
   
   Texture *result = NULL;
 
-  result = artTiles.findEntry(index - 0x4000);
+  result = artTiles.findEntry(index);
 
   if(!result) {
 
@@ -80,9 +77,9 @@ Texture *TextureBuffer::GetArtTexture(int index)
 	
     result = pArtLoader->LoadArt(index);
     if (!result) {
-    	result = new Texture;
+    	result = new Texture(index);
     }
-    artTiles.addEntry(index - 0x4000, result);
+    artTiles.addEntry(index, result);
   }
 
   return result;
@@ -103,7 +100,7 @@ Texture *TextureBuffer::GetGroundTexmap(int index)
     result = pGroundTextureLoader->LoadTexture(index);
     
     if (!result)
-    	result = new Texture;
+    	result = new Texture(index);
     groundTexmaps.addEntry(index, result);
   }
 
