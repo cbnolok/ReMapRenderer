@@ -50,17 +50,15 @@ void Game::LoadMuls(std::string mulpath)
 		if ((last_char != '/') && (last_char != '\\'))
 			mulpath += "/";
 	}
-
-    // TODO: support map indexes from 0 to 5. Add xml entry for map index to render.
 	
-	string mul_map0 = mulpath+"map0.mul";
-	string mul_statics0 = mulpath+"statics0.mul";
-	string mul_staidx0 = mulpath+"staidx0.mul";
-	string mul_texmaps = mulpath+"texmaps.mul";
-	string mul_texidx = mulpath+"texidx.mul";
+	string mul_map =       mulpath+ "map"    + to_string(nConfig::mapindex) + ".mul";
+	string mul_statics =   mulpath+ "statics"+ to_string(nConfig::mapindex) + ".mul";
+	string mul_staidx =    mulpath+ "staidx" + to_string(nConfig::mapindex) + ".mul";
+	string mul_texmaps =   mulpath+ "texmaps.mul";
+	string mul_texidx =    mulpath+ "texidx.mul";
        
         pDebug.Log("SYS | Loading UO Files....");	
-        pMapLoader = new UOMapLoader((char*)mul_map0.c_str(), (char*)mul_statics0.c_str(), (char*)mul_staidx0.c_str(), UOMAP_MAP0);
+        pMapLoader = new UOMapLoader(mul_map.c_str(), mul_statics.c_str(), mul_staidx.c_str(), nConfig::widthblocks, nConfig::heightblocks);
         pMapbuffer = new cMapbuffer;
        
         pGroundTextureLoader = new cGroundTextureLoader(mul_texmaps, mul_texidx);
@@ -84,13 +82,6 @@ int Game::Init(void)
     		pDebug.Log("Renderer Creation failed in Game::Init(void)", __FILE__,
 	       		__LINE__, LEVEL_CRITICAL);
     	return (false);
-  	}
- 
-
-	if(!renderer->Init()) {
-    		pDebug.Log("Renderer Initialization failed in Game::Init(void)", __FILE__,
-	       __LINE__, LEVEL_ERROR);
-    		return (false);
   	}
 
   return (true);
@@ -122,12 +113,6 @@ int Game::DeInit(void)
 	pTileDataLoader = NULL;
     
     if (renderer) {
-        pDebug.Log("SYS | Shutting down renderer....");
-    	if(!renderer->DeInit()) {
-      		pDebug.Log("Renderer Shutdown failed in Game::DeInit(void)", __FILE__,
-		 	__LINE__, LEVEL_ERROR);
-      		return (false);
-    	}
        delete renderer;
        renderer = NULL;
     }

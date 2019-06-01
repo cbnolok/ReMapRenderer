@@ -2,13 +2,14 @@
 #include "include.h"
 #include <string>
 
+#define RENDER_CACHE_WIDTH 1024
+#define RENDER_CACHE_HEIGHT 1024
+
 namespace	nConfig
 {
-	// GFX
-	extern	int		width, height, bpp;
-
-	// UO	
-	extern int startx, starty, startz;
+	// UO
+    extern int mapindex;
+    extern int widthblocks, heightblocks;
 	extern std::string mulpath;
 	extern int minblockx, maxblockx, minblocky, maxblocky;
 	extern int minx, maxx, miny, maxy;

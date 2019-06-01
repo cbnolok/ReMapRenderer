@@ -25,7 +25,6 @@ set(SF_INCLUDE_LOADERS
 )
 source_group(include\\loaders FILES ${SF_INCLUDE_LOADERS})
 set(SF_INCLUDE_RENDERER 
-    include/renderer/Camera.h
     include/renderer/MapBlock.h
     include/renderer/MapBuffer.h
     include/renderer/Node.h
@@ -58,7 +57,6 @@ set(SF_LOADERS
 )
 source_group(src\\loaders FILES ${SF_LOADERS})
 set(SF_RENDERER
-    src/renderer/Camera.cpp
     src/renderer/MapBlock.cpp
     src/renderer/MapBuffer.cpp
     src/renderer/Node.cpp
@@ -102,7 +100,7 @@ add_executable(ReMapRenderer
 )
 
 if (WIN32)
-    target_link_libraries(ReMapRenderer SDLmain SDL OpenGL32 wsock32)
+    target_link_libraries(ReMapRenderer SDLmain SDL OpenGL32)
     target_compile_definitions(ReMapRenderer PUBLIC _CRT_SECURE_NO_WARNINGS)
 else (WIN32)
     target_link_libraries(ReMapRenderer GL GLU SDL_ttf SDL_net SDL_mixer SDL_image SDL pthread)
@@ -110,7 +108,7 @@ else (WIN32)
 endif (WIN32)
 
 if (MSVC)
-    set (CMAKE_CXX_FLAGS "/O2 /EHsc /Oy /MP")
+    set (CMAKE_CXX_FLAGS "/O2 /EHsc /Oy /Oi /MP")
 else (MSVC)
     set(CMAKE_CXX_FLAGS "-s -O3")
 endif(MSVC)

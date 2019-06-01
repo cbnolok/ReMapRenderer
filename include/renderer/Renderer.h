@@ -27,12 +27,11 @@
 #include <windows.h>
 #endif
 
+#include "MapBlock.h"
 #include "Texture.h"
-#include "Camera.h"
 
 #include <string>
 #include <vector>
-#include <list>
 
 #include "SDL/SDL.h"
 #include "Texture.h"
@@ -42,30 +41,16 @@ class Renderer
 private:
 	void RenderTerrain (SDL_Surface * target, int mx, int my);
 	void RenderStatics (SDL_Surface * target, int mx, int my);
-	int view_distance;
-	
-	bool do_redraw;
-	SDL_Surface * static_buffer;
-	SDL_Surface * ground_buffer;
-	
-	int cache_x;
-	int cache_y;	
-	
+		
 public:
-    Renderer ();
+   Renderer ();
    virtual ~Renderer ();
-
-   virtual int Init(void);
-   virtual int DeInit(void);
-
-   int GetViewDistance() { return view_distance; }
       
    void Rebuild (int mx, int my);
 	
-   void RecalcHeight();
+   INT_Rect CalcRenderBox();
    
 protected:
-   int flags;
    int hotspotx, hotspoty;
 };
 

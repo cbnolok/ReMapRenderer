@@ -449,7 +449,6 @@ bool cMapblock::Generate(int blockx, int blocky)
         */
   }
   
-  /*
   for (xc = 0; xc < 9; ++xc)
 	for (yc = 0; yc < 9; ++yc) {
 	   int y2 = ground_draw_pos[xc][yc][1] - ground_draw_pos[xc+1][yc][1];
@@ -458,7 +457,6 @@ bool cMapblock::Generate(int blockx, int blocky)
        if (alpha_values[xc][yc] > 10.0f) alpha_values[xc][yc] = 10.0f;
        if (alpha_values[xc][yc] < -50.0f) alpha_values[xc][yc] = -50.0f;
   }
-  */
 
   int min_x = 1000000;
   int max_x = -1000000;
@@ -762,43 +760,6 @@ void cMapblock::RenderStatics(int x, int y, SDL_Surface * target, SDL_Rect * cli
 
      
 }
-
-int cMapblock::GetGroundZ(Uint32 x, Uint32 y)
-{
-	if ((x < 8) && (y < 8))
-		return heightmap[y][x];
-	return 0;
-}
-
-int cMapblock::GetWalkZ(Uint32 dstx, Uint32 dsty, int srcz)
-{
-	if ((dstx >= 8) || (dsty >= 8))
-		return 255;
-	int ground = heightmap[dsty][dstx];
-     	
-	objectlist_t * objectlist = objects.GetList();
-   	for (cEntity * object : *objectlist) {
-		if (object->tileclass != TILE_CLASS_ITEM)
-		  continue;
-        cStaticObject * item = static_cast<cStaticObject *>(object);
-		if ((object->x == dstx) && (object->y == dsty)) {
-			if (item->tiledata_flags & (TILEDATAFLAG_SURFACE | TILEDATAFLAG_BRIDGE | TILEDATAFLAG_STAIRBACK | TILEDATAFLAG_STAIRRIGHT)) 
-			{
-				int z = item->z + item->height;
-				if ((z <= srcz + 5) && (z > ground))
-					ground = z;
-			}
-			if (item->tiledata_flags & (TILEDATAFLAG_WALL | TILEDATAFLAG_IMPASSABLE)) 
-			{
-				int z = object->z + object->height;
-				if (!((srcz + 5 < object->z) || (srcz >= z))) 
-					return 255;
-			}
-		}
-	}
-	return ground;
-}
-
 
 void cMapblock::GetBounds(INT_Rect * rect, int x, int y)
 {

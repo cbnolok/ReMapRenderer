@@ -8,7 +8,6 @@
 #include <fstream>
 #include <cstring>
 #include "Debug.h"
-#include "Config.h"
 #include <stdlib.h> // doc: malloc and free
 #include "loaders/LocalMapPatches.h"
 
@@ -17,8 +16,7 @@ using namespace std;
 MapLoader * pMapLoader = NULL;
 
 
-UOMapLoader::UOMapLoader(char *mapfile, char *staticfile, char *staidx,
-			 int type)
+UOMapLoader::UOMapLoader(const char *mapfile, const char *staticfile, const char *staidx, int widthblocks, int heightblocks)
 {
   mapstream = new ifstream(mapfile, ios::in | ios::binary);
   if(!mapstream) {
@@ -74,13 +72,8 @@ UOMapLoader::UOMapLoader(char *mapfile, char *staticfile, char *staidx,
     return;
   }
 
-  if(type == UOMAP_MAP2) {
-    width = 288;
-    height = 200;
-  } else {
-    width = 768;
-    height = 512;
-  }
+  width = widthblocks;
+  height = heightblocks;
 
   patches = new LocalMapPatches;
 //  patches = NULL;
@@ -88,19 +81,24 @@ UOMapLoader::UOMapLoader(char *mapfile, char *staticfile, char *staidx,
 
 UOMapLoader::~UOMapLoader()
 {
-  mapstream->close();
-  delete mapstream;
+    if (mapstream)
+    {
+        mapstream->close();
+        delete mapstream;
+    }
+    if (staticstream)
+    {
+        staticstream->close();
+        delete staticstream;
+    }
+    if (staidxstream)
+    {
+        staidxstream->close();
+        delete staidxstream;
+    }
 
-  staticstream->close();
-  delete staticstream;
-
-  staidxstream->close();
-  delete staidxstream;
-
-  if (patches)
-  	delete patches;
-
-
+    if (patches)
+        delete patches;
 }
 
 void UOMapLoader::LoadMapBlock(int x, int y, MulBlock * block)

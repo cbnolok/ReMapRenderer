@@ -58,9 +58,6 @@ public:
    bool Generate(int blockx, int blocky);
    void RenderGround(int x, int y, SDL_Surface * target, SDL_Rect * cliprect = NULL);
    void RenderStatics(int x, int y, SDL_Surface * target, SDL_Rect * cliprect = NULL, int tile_type = TILE_CLASS_ALL);
-   
-   int GetGroundZ(Uint32 x, Uint32 y);
-   int GetWalkZ(Uint32 dstx, Uint32 dsty, int srcz);
 	   
    int blockx, blocky;
    

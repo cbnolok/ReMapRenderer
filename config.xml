@@ -1,0 +1,40 @@
+<CONFIG>
+    <UO>
+		<!-- Your UO path -->
+		<MULPATH>D:\Ultima Online\_clients\UO_cc\</MULPATH>
+
+		<!-- Map plane to render -->
+		<MAPINDEX>0</MAPINDEX>
+		<WIDTHBLOCKS>896</WIDTHBLOCKS>
+		<HEIGHTBLOCKS>512</HEIGHTBLOCKS>
+		<!-- Blocks are calculated by dividing x or y by 8 -->
+		<!-- Map0. Pre-ML: 768x512. Post-ML: 896x512 -->
+		<!-- Map1. Pre-ML: 768x512. Post-ML: 896x512 -->
+		<!-- Map2. 288x200 -->
+		<!-- Map3. 320x256 -->
+		<!-- Map4. 181x181 -->
+		<!-- Map5. 160x512 -->
+
+		<!-- Rendering area -->
+		<MINX>0</MINX>
+		<MINY>1024</MINY>
+		<MAXX>2048</MAXX>
+		<MAXY>2048</MAXY>
+
+		<!-- Output File (Windows Bitmap) -->
+ 		<OUTPUT>output.bmp</OUTPUT>
+
+		<!-- Worldfile Patch (_not_ an emu worldfile, it has a format specific for MapRenderer) -->
+		<!-- <PATCHES>worldfile.dif</PATCHES> -->
+
+		<!-- Detail level: 0 = best, be careful with this! ;) -->
+		<DETAIL>3</DETAIL>   
+
+		<!-- Cache sizes (in bytes): lower = less memory usage, more cpu usage -->
+		<CACHE_ART>500</CACHE_ART>         <!-- rendered art tile texture -->
+		<CACHE_TEXTURE>300</CACHE_TEXTURE> <!-- rendered terrain tile texture -->
+		<CACHE_GROUND>1000</CACHE_GROUND>  <!-- ground texmaps -->
+		<CACHE_BLOCK>100</CACHE_BLOCK>     <!-- map blocks -->
+    </UO>
+</CONFIG>
+

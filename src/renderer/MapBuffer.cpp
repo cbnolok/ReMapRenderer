@@ -7,7 +7,6 @@
 #include "Config.h"
 #include "Debug.h"
 #include "include.h"
-#include "renderer/Camera.h"
 
 using namespace std;
 

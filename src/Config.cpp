@@ -19,55 +19,44 @@ struct ParserData{
 
 namespace nConfig {
 
-// Screen related
-  int width = 640;
-  int height = 480;
-  int bpp = 16;
-
 // UO related
-  int startx = 1500;
-  int starty = 1000; 
-  int startz = 0;
+  int mapindex = 0;
+  int widthblocks = 768;
+  int heightblocks = 512;
+
   string mulpath;
   string patches = "";
   string output="output.bmp";
 
-  int minblockx = 344; 
-  int maxblockx = 364;
-  int minblocky = 222;
-  int maxblocky = 242;
+  int minblockx = -1; 
+  int maxblockx = -1;
+  int minblocky = -1;
+  int maxblocky = -1;
 
   int minx = 1880; 
   int miny = 2660;
   int maxx = 1900;
   int maxy = 2680;
   
-  // size in bytes
-  int cache_art     = 50000;
-  int cache_texture = 200000;
-  int cache_ground  = 1000000;
-
-  // number of blocks
-  int cache_block = 200;
+  // maximum number of elements in the cache
+  int cache_art     = 500;  // art tile SDL texture
+  int cache_texture = 300;  // ground tile SDL texture
+  int cache_ground  = 1000; // ground texmaps
+  int cache_block = 150;    // map blocks
 
   int detail = 0;
 }
 using namespace nConfig;
 // important always write childs of section behind that Section array element
 ParserData ParserInfo[] = {
-	// Section Gfx
-	ParserData("GFX", IS_SECTION , NULL),
-	ParserData("WIDTH", IS_INTEGER , &width),
-	ParserData("HEIGHT", IS_INTEGER , &height),
-	ParserData("BPP", IS_INTEGER , &bpp),
 	ParserData("UO", IS_SECTION , NULL),
+    ParserData("MAPINDEX", IS_INTEGER , &mapindex),
+    ParserData("WIDTHBLOCKS", IS_INTEGER , &widthblocks),
+    ParserData("HEIGHTBLOCKS", IS_INTEGER , &heightblocks),
 	ParserData("MINX", IS_INTEGER , &minx),
 	ParserData("MINY", IS_INTEGER , &miny),
 	ParserData("MAXX", IS_INTEGER , &maxx),
 	ParserData("MAXY", IS_INTEGER , &maxy),
-	ParserData("STARTX", IS_INTEGER , &startx),
-	ParserData("STARTY", IS_INTEGER , &starty),
-	ParserData("STARTZ", IS_INTEGER , &startz),
 	ParserData("MULPATH", IS_STRING , &mulpath),
 	ParserData("OUTPUT", IS_STRING , &output),
 	ParserData("PATCHES", IS_STRING , &patches),

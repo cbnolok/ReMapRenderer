@@ -28,22 +28,16 @@
 #endif
 
 #include "SDL/SDL.h"
-#include <iostream>
 #include <fstream>
-#include <cstring>
 #include "../uotype.h"
 #include "Map.h"
-#include "../Debug.h"
 #include "MapPatches.h"
 
-
-#define UOMAP_MAP0  1
-#define UOMAP_MAP2  2
 
 class UOMapLoader : public MapLoader
 {
 private:
-	std::ifstream * mapstream;
+    std::ifstream * mapstream;
    std::ifstream * staticstream;
    std::ifstream * staidxstream;
    int width, height;
@@ -52,7 +46,7 @@ private:
 
 
 public:
-   UOMapLoader (char * mapfile, char * staticfile, char * staidx, int type);
+   UOMapLoader (const char * mapfile, const char * staticfile, const char * staidx, int widthblocks, int heightblocks);
    virtual ~UOMapLoader ();
 
    void	LoadMapBlock( int x, int y, MulBlock *block );
@@ -64,8 +58,6 @@ public:
 
    void Save(char * filename);
    void Load(char * filename);
-   
-
 };
 
 
