@@ -86,29 +86,27 @@ if (WIN32)
         link_directories("${CMAKE_SOURCE_DIR}/_winlibs/x86/")
     endif()
 else (WIN32)
-    include_directories(/usr/X11R6/include/)
+    #include_directories(/usr/X11R6/include/)
     #include_directories(/usr/include/SDL/)
-    link_directories(/usr/lib /usr/X11R6/lib)
+    #link_directories(/usr/lib /usr/X11R6/lib)
 endif (WIN32)
 
 include_directories("${CMAKE_SOURCE_DIR}/include/" "${CMAKE_SOURCE_DIR}/include_sdl/")
 
 set(CMAKE_CXX_STANDARD 11) # c++11
 add_executable(ReMapRenderer 
+    resources/MapRenderer.rc 
     ${SF_INCLUDE_BASE} ${SF_INCLUDE_LOADERS} ${SF_INCLUDE_RENDERER} 
     ${SF_BASE} ${SF_LOADERS} ${SF_RENDERER}
 )
 
+target_link_libraries(ReMapRenderer SDL2main SDL2)
 if (WIN32)
-    target_link_libraries(ReMapRenderer SDLmain SDL OpenGL32)
     target_compile_definitions(ReMapRenderer PUBLIC _CRT_SECURE_NO_WARNINGS)
-else (WIN32)
-    target_link_libraries(ReMapRenderer GL GLU SDL_ttf SDL_net SDL_mixer SDL_image SDL pthread)
-    target_compile_definitions(ReMapRenderer PUBLIC HAVE_OPENGL)
 endif (WIN32)
 
 if (MSVC)
     set (CMAKE_CXX_FLAGS "/O2 /EHsc /Oy /Oi /MP")
 else (MSVC)
-    set(CMAKE_CXX_FLAGS "-s -O3")
+    set(CMAKE_CXX_FLAGS "-s -O3 -fomit-frame-pointer")
 endif(MSVC)

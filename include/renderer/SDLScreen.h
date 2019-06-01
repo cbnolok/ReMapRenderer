@@ -23,27 +23,16 @@
 #ifndef _SDLSCREEN_H_
 #define _SDLSCREEN_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include <iostream>
-#include <fstream>
-#include <cstring>
 #include "SDL/SDL.h"
-#include <map>
-#include <list>
 
 using namespace std;
 
 class SDLScreen
 {
 private:
-  const SDL_VideoInfo *videoInfo;
   Uint8 act_alpha;
   
   float light_factor;
-  Uint32 act_update;
 
 public:
     SDLScreen ();
@@ -51,11 +40,6 @@ public:
 
   int Init (int width, int height, int bpp);
   SDL_Surface *screen;
-  int videoFlags;
-  
-  void Save (char * filename) {
-    SDL_SaveBMP(screen, filename);
-  }
 };
 
 extern float BilinearTable[32][32][4];

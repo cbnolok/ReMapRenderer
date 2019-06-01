@@ -4,6 +4,7 @@
 //
 
 #include <iostream>
+#include <fstream>
 #include "renderer/SDLScreen.h"
 #include "renderer/TextureBuffer.h"
 #include "loaders/Map.h"
@@ -16,30 +17,16 @@ using namespace std;
 
 SDLScreen *SDLscreen;
 
-
-// Workaround to make the linked SDL dll work, since it was compiled with an old MSVC version,
-//  which had a different internal implementation to retrieve stdin, stdout, stderr
-#ifdef _MSC_VER
-    FILE _iob[] = {*stdin, *stdout, *stderr};
-    extern "C" FILE * __cdecl __iob_func(void)
-    {
-        return _iob;
-    }
-#endif
-
-
 extern "C" // needed by SDL
 int main(int argc, char *argv[])
 {
-  printf("(Re)MapRenderer v1.1 (%zu bits build).\n", (sizeof(void*) * 8));
-
+  printf("(Re)MapRenderer v2.0 (%zu bits build).\n", (sizeof(void*) * 8));
 
   if(!nConfig::Init()) {
     pDebug.Log("Unable to load configuration file - Using defaults ", __FILE__, __LINE__,
 	       LEVEL_WARNING);
   }
 
-  
   SDLscreen = new SDLScreen();
 
   int detail = nConfig::detail;

@@ -181,8 +181,8 @@ static SDL_Surface * CreateHuedSurface(SDL_Surface * surface, Uint16 HueID)
     const struct stHue * hue = pHueLoader->getHue(HueID);
     
 
-    SDL_Surface * result = SDL_CreateRGBSurface(SDL_SRCCOLORKEY, surface->w, surface->h, 16, SDL_RGB_16_BITMASK);
-    SDL_SetColorKey(result, SDL_SRCCOLORKEY, 0);
+    SDL_Surface * result = SDL_CreateRGBSurface(0, surface->w, surface->h, 16, SDL_RGB_16_BITMASK);
+    SDL_SetColorKey(result, SDL_TRUE, 0);
     
     Uint16 * src = (Uint16*) surface->pixels;
     Uint16 * dst = (Uint16*) result->pixels;
@@ -290,7 +290,7 @@ m1 = (float) (up_point - right_point) / 22.0f;
 m2 = (float) (down_point - right_point) / 22.0f;
 for (int x = 22; x < 44; x++) {
     float tx = (x - 22) * tfac;    
-    float ty = tsize - 1;
+    float ty = (float) (tsize - 1);
 
     float dy = yp2 - yp1 + 1.0f;
     float m = (ty - tx) / dy;

@@ -33,11 +33,8 @@ int Texture::LoadFromData(void * data, int width, int height, int bits_per_pixel
 	
   if (bits_per_pixel != 32) 
   	return false;
-  
-  int pitch = width * 4;
-  
 
-    /* SDL interprets each pixel as a 32-bit number, so our masks must depend
+  /* SDL interprets each pixel as a 32-bit number, so our masks must depend
        on the endianness (byte order) of the machine */
   
 //  surface = SDL_CreateRGBSurface&*From(data, width, height, bits_per_pixel, pitch, rmask, gmask, bmask, amask);
@@ -61,15 +58,12 @@ int Texture::Create16(int width, int height)
 	
   _surface = NULL;
 	
-  
-  
-
     /* SDL interprets each pixel as a 32-bit number, so our masks must depend
        on the endianness (byte order) of the machine */
   
 //  surface = SDL_CreateRGBSurface&*From(data, width, height, bits_per_pixel, pitch, rmask, gmask, bmask, amask);
-  _surface = SDL_CreateRGBSurface(SDL_SRCCOLORKEY, width, height, 16, SDL_RGB_16_BITMASK);
-  SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
+  _surface = SDL_CreateRGBSurface(0, width, height, 16, SDL_RGB_16_BITMASK);
+  SDL_SetColorKey(_surface, SDL_TRUE, 0);
 	
   if (!_surface) {
 	pDebug.Log("Out of Memory in Texture::LoadFromData ()", __FILE__, __LINE__, LEVEL_ERROR );
@@ -86,16 +80,13 @@ int Texture::LoadFromData16(void * data, int width, int height, int bits_per_pix
   	SDL_FreeSurface(_surface);
 	
   _surface = NULL;
-	
-  
-  
 
-    /* SDL interprets each pixel as a 32-bit number, so our masks must depend
+  /* SDL interprets each pixel as a 32-bit number, so our masks must depend
        on the endianness (byte order) of the machine */
   
 //  _surface = SDL_CreateRGBSurface&*From(data, width, height, bits_per_pixel, pitch, rmask, gmask, bmask, amask);
-  _surface = SDL_CreateRGBSurface(SDL_SRCCOLORKEY, width, height, 16, SDL_RGB_16_BITMASK);
-  SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
+  _surface = SDL_CreateRGBSurface(0, width, height, 16, SDL_RGB_16_BITMASK);
+  SDL_SetColorKey(_surface, SDL_TRUE, 0);
   texture_mem += _surface->w * _surface->h * 2;
 	
   if (!_surface) {
