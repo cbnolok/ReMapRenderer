@@ -155,10 +155,8 @@ struct staticinfo * UOMapLoader::LoadStatics(int x, int y, int &len)
   struct staticentry * uostatics = (struct staticentry *) malloc(block.length);
   struct staticinfo * static_infos = (struct staticinfo *) malloc(len * sizeof (struct staticinfo));
 
-
   staticstream->seekg(block.offset, ios::beg);
   staticstream->read((char *) uostatics, block.length);
-
 
   struct staticentry * uo_p = uostatics;
   struct staticinfo * info_p =  static_infos;

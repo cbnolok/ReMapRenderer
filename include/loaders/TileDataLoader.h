@@ -23,15 +23,7 @@
 #ifndef _TILEDATALOADER_H_
 #define _TILEDATALOADER_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include <iostream>
 #include <fstream>
-#include <cstring>
-#include "SDL/SDL.h"
-#include "include.h"
 #include "uotype.h"
 
 
@@ -39,13 +31,12 @@ class cTileDataLoader
 {
 private:
 	std::ifstream * tiledatafile;
+    bool highseas;
    
 public:
     cTileDataLoader (std::string filename);
    ~cTileDataLoader ();
-	bool LoadEntry (Uint32 index, struct TileDataStaticEntry * entry);
-   
-protected:
+	bool LoadEntry (unsigned int index, struct TileDataStaticEntry * entry);
 };
 
 extern cTileDataLoader * pTileDataLoader;

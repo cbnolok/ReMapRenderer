@@ -59,11 +59,10 @@ Texture *TextureBuffer::GetGroundTexture(int index)
 
 Texture *TextureBuffer::GetArtTexture(int index)
 {
-  
   if ((index < 0x4000) && (index >= 0))
   	return GetGroundTexture(index);
   
-  if ((index < 0x0) || (index >= 0x7FFFF)) // TODO: or lower, if tiledata is not SA?
+  if ((index < 0x0) || (index >= tiledataMaxID))
   	return NULL;
   
   Texture *result = NULL;

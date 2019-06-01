@@ -26,7 +26,6 @@ inline unsigned int color15to32( unsigned short color )
 }
 
 
-
 struct staticentry {
    unsigned short TileID : 16;
    char x : 8;
@@ -69,18 +68,30 @@ struct VerDataEntry {
  unsigned int extra;
 } STRUCT_PACKED;
 
-// TODO: support HS tiledata
+struct TileDataStaticEntry_PreHS {
+    unsigned int flags;
+    unsigned char weight;
+    unsigned char quality;
+    unsigned short unknown;
+    unsigned char unknown1;
+    unsigned char quantity;
+    unsigned short animid;
+    unsigned short hue;
+    unsigned short lightidx;
+    unsigned char height;
+    char name[20];
+} STRUCT_PACKED;
+
 struct TileDataStaticEntry {
- unsigned int flags;
+ unsigned long long flags;
  unsigned char weight;
  unsigned char quality;
  unsigned short unknown;
  unsigned char unknown1;
  unsigned char quantity;
  unsigned short animid;
- unsigned char unknown2;
- unsigned char hue;
- unsigned short unknown3;
+ unsigned short hue;
+ unsigned short lightidx;
  unsigned char height;
  char name[20];
 } STRUCT_PACKED;
@@ -93,54 +104,6 @@ struct StaticPatch {
 	unsigned short blockx, blocky;
 	signed short z;
 } STRUCT_PACKED;
-
-struct FrameInfo2D {
-	float u1, v1, u2, v2;
-	int height, width;
-	int centerx, centery;
-};
-
-struct script_Playerinfo {
-	unsigned int count;
-	struct
-	{
-		char	m_name[30];
-		char	m_pass[30];
-	} m_names[5];
-};
-
-struct clothinginfo {
-  unsigned int serial;
-  unsigned short body;
-  unsigned char layer;
-  unsigned short hue;
-  unsigned short animid;
-  unsigned int flags;
-};
-
-struct status_info {
-	Uint32 id;
-	char name[30];
-	Uint16 hits, maxhits;
-	bool namechange;
-	Uint8 sex;
-	Uint16 m_str, m_dex, m_int;
-	Uint16 stamina, maxstamina;
-	Uint16 mana, maxmana;
-	Uint32 gold;
-	Uint16 armor;
-	Uint16 weight;
-};
-
-struct skill_entry {
-	Uint16 skill, unmodified, skillcap;
-	Uint8 skilllock;
-} STRUCT_PACKED;
-
-struct skill_name {
-	char * name;
-	bool use_button;
-};
 
 #define TILEDATAFLAG_BACKGROUND    0x00000001
 #define TILEDATAFLAG_WEAPON        0x00000002
@@ -177,25 +140,6 @@ struct skill_name {
 
 #define PATCH_DELETE   1
 #define PATCH_ADD      2
-
-#define NETERROR_UNKNOWN           0
-#define NETERROR_SOCKET            1
-#define NETERROR_UNKNOWNHOST       2
-#define NETERROR_NOCONNECTION      3
-#define NETERROR_CONNECTIONABORTED 4
-#define NETERROR_UNKNOWNUSER       5
-#define NETERROR_ACCOUNTINUSE      6
-#define NETERROR_ACCOUNTBLOCKED    7
-#define NETERROR_BADPASSWORD       8
-
-#define REQUEST_BASIC 0
-#define REQUEST_SKILLS 1
-
-#define ACTIONTYPE_SKILL    0
-#define ACTIONTYPE_SPELL    1
-#define ACTIONTYPE_OPENDOOR 2
-#define ACTIONTYPE_BOW      3
-#define ACTIONTYPE_SALUTE   4
 
 #define VERDATAPATCH_ART  0x4
 #define VERDATAPATCH_GUMP 0xC

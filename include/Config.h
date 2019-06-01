@@ -5,6 +5,8 @@
 #define RENDER_CACHE_WIDTH 1024
 #define RENDER_CACHE_HEIGHT 1024
 
+extern int tiledataMaxID;
+
 namespace	nConfig
 {
 	// UO

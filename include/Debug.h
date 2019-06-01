@@ -23,11 +23,6 @@
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include "SDL/SDL.h"
 #include <string>
 
 #define LEVEL_WARNING  0

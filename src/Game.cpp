@@ -57,7 +57,7 @@ void Game::LoadMuls(std::string mulpath)
 	string mul_texmaps =   mulpath+ "texmaps.mul";
 	string mul_texidx =    mulpath+ "texidx.mul";
        
-        pDebug.Log("SYS | Loading UO Files....");	
+        pDebug.Log("SYS | Loading UO Files...");	
         pMapLoader = new UOMapLoader(mul_map.c_str(), mul_statics.c_str(), mul_staidx.c_str(), nConfig::widthblocks, nConfig::heightblocks);
         pMapbuffer = new cMapbuffer;
        
@@ -76,7 +76,7 @@ int Game::Init(void)
 {
        LoadMuls(nConfig::mulpath);
         
-       pDebug.Log("SYS | Initializing renderer....");
+       pDebug.Log("SYS | Initializing renderer...");
   	renderer = new Renderer();
   	if(!renderer) {
     		pDebug.Log("Renderer Creation failed in Game::Init(void)", __FILE__,
@@ -89,7 +89,7 @@ int Game::Init(void)
 
 int Game::DeInit(void)
 {
-	pDebug.Log("SYS | Unloading UO Files....");
+	pDebug.Log("SYS | Unloading UO Files...");
 
 	delete pMapLoader;
     pMapLoader = NULL;

@@ -20,7 +20,6 @@ Debug::Debug()
 
 Debug::~Debug()
 {
-// TODO: Place Destructor Here
 }
 
 // Only print to stderr in Debug mode, otherwise redirect to file (debug.txt)

@@ -370,7 +370,7 @@ cMapblock::~cMapblock()
 
 
 static void CreateObject(cEntity *object, unsigned int x, unsigned int y,
-		  int z, unsigned int tileid)
+		  int z, unsigned int tileid, bool skiptiledata = false)
 {
   object->x = x % 8;
   object->y = y % 8;
@@ -379,7 +379,7 @@ static void CreateObject(cEntity *object, unsigned int x, unsigned int y,
   object->blocky = y / 8;
   object->tileid = tileid;
   object->hue = 0;
-  if (pTileDataLoader) {
+  if (!skiptiledata && pTileDataLoader) {
   	struct TileDataStaticEntry entry;
 	pTileDataLoader->LoadEntry(tileid, &entry);
 	object->height = entry.height;
@@ -515,15 +515,18 @@ bool cMapblock::Generate(int blockx, int blocky)
      for (int istatic = 0; istatic < staticcount; ++istatic)
   	{
 			cEntity * object;
-            // TODO: max TileID changed with SA?
-   			if (((statics_p->TileID >= 6038) && (statics_p->TileID <= 6066))) {
+   			if (((statics_p->TileID >= 6038) && (statics_p->TileID <= 6066)))
+            {
+                // Water statics
     			object = objects.AddGround();
 				CreateObject(object, x + statics_p->x, y + statics_p->y, 
-					statics_p->z, statics_p->TileID);
+					statics_p->z, statics_p->TileID, true);
 				object->tileclass = TILE_CLASS_GROUND;
 				object->tileid = statics_p->TileID + 0x4000;
 				((cGroundObject *) object)->stretch = 0;
-            } else {
+            }
+            else
+            {
     			object = objects.AddStatic();
 				CreateObject(object, x + statics_p->x, y + statics_p->y, 
 					statics_p->z, statics_p->TileID);

@@ -48,7 +48,7 @@ public:
   int tileid;
   int hue;
   unsigned int flags;
-  unsigned int tiledata_flags;
+  unsigned long long tiledata_flags;
   Uint32 id;
   int height;
   virtual ~cEntity () { };
