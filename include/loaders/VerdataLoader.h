@@ -24,8 +24,6 @@
 #define _VERDATALOADER_H_
 
 #include <fstream>
-#include "include.h"
-
 #include "../uotype.h"
 
 struct sPatchResult {
@@ -45,9 +43,6 @@ public:
    ~cVerdataLoader ();
    
    struct sPatchResult FindPatch (unsigned int fileid, unsigned int blockid);
-   
-protected:
-
 };
 
 extern cVerdataLoader * pVerdataLoader;

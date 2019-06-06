@@ -24,7 +24,6 @@
 #define _GROUNDTEXTURES_H_
 
 #include <fstream>
-#include "include.h"
 #include "../renderer/Texture.h"
 
 class cGroundTextureLoader

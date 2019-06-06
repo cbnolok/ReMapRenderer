@@ -4,7 +4,6 @@
 //
 
 #include <cmath>
-#include <iostream>
 #include "renderer/MapBlock.h"
 #include "Debug.h"
 #include "include.h"
@@ -178,9 +177,6 @@ static SDL_Surface * CreateHuedSurface(SDL_Surface * surface, Uint16 HueID)
     if (!surface)
         return NULL;
 
-    const struct stHue * hue = pHueLoader->getHue(HueID);
-
-
     SDL_Surface * result = SDL_CreateRGBSurface(0, surface->w, surface->h, 16, SDL_RGB_16_BITMASK);
     SDL_SetColorKey(result, SDL_TRUE, 0);
 
@@ -188,16 +184,16 @@ static SDL_Surface * CreateHuedSurface(SDL_Surface * surface, Uint16 HueID)
     Uint16 * dst = (Uint16*)result->pixels;
     int size = surface->w * surface->h;
 
-
-    for (int i = 0; i < size; i++) {
+    const struct stHue * hue = pHueLoader->getHue(HueID);
+    for (int i = 0; i < size; ++i) {
         if (*src)
             *dst = hue->colors[(*src >> 10) & 31];
-        src ++; dst ++;
+        ++src; ++dst;
     }
     return result;
 }
 
-static inline void LightenPixel(Uint32 * pixel, Sint16 value)
+static inline void LightenPixel(Uint32 * pixel, short value)
 {
     Uint8 * p = (Uint8 *)pixel;
     for (unsigned char i = 0; i < 3; ++i) {
@@ -209,7 +205,7 @@ static inline void LightenPixel(Uint32 * pixel, Sint16 value)
     }
 }
 
-static int CalcStretchHeight(int y2, int y3, int y4, int & min_y)
+static inline int CalcStretchHeight(int y2, int y3, int y4, int & min_y)
 {
     int max_y = 0;
     min_y = 0;
@@ -229,118 +225,133 @@ static SDL_Surface * GetStretchedSurface (int y2, int y3, int y4, int * alphas, 
     if (!texture)
         return NULL;
 
-    int tsize = texture->w - 1;
-    float tfac = (float)texture->w / 22.0f;
+    const int tsize = texture->w - 1;
+    const float tfac = (float)texture->w / 22.0f;
 
     //y2 = 0; y3 = 0; y4 = 0;
 
-    int up_point = y2;
-    int down_point = y3;
-    int right_point = y4;
+    const int up_point = y2;
+    const int down_point = y3;
+    const int right_point = y4;
 
-    if (up_point > down_point) {
+    if (up_point > down_point)
         return NULL;
-    }
 
-    if (!h) {
+    if (!h)
         return NULL;
-    }
 
     //hotspot[0] = 0;
     //hotspot[1] = -y2 + min_y;// - 22;
 
-    SDL_Surface * surface = SDL_CreateRGBSurface(SDL_SWSURFACE, 44, h, 32, SDL_BITMASK);
-    //return surface;
+    SDL_Surface * surface = SDL_CreateRGBSurface(0, 44, h, 32, SDL_BITMASK);
     float m1 = (float)up_point / 22.0f;
     float m2 = (float)down_point / 22.0f;
 
     float yp1 = 0.0f;
     float yp2 = 0.0f;
 
-    //printf("%i\n", alphas[0]);
+    Uint32 * qtex = (Uint32 *)texture->pixels;
+    Uint32 * qsurf = (Uint32 *)surface->pixels;
 
-    Uint32 * q = (Uint32 *)texture->pixels;
-
-    for (int x = 0; x < 22; x++) {
+    for (int x = 0; x < 22; ++x)
+    {
         float tx = 0.0f;
         float ty = x * tfac;
 
-        Uint32 * p = (Uint32 *)surface->pixels + x + ((int)yp1 - min_y) * 44;
+        Uint32 * p = qsurf + x + ((int)yp1 - min_y) * 44;
         float dy = yp2 - yp1 + 1;
-        if (!dy) dy = 0.0001f;
+        if (!dy)
+            dy = 0.0001f;
         float m = ty / dy;
 
         //        printf("%.2f %.2f\n", tx, ty);
-        for (int y = (int)yp1; y <= (int)yp2; y++) {
-            Uint32 *src = q + (int)tx + (tsize - (int)ty) * texture->w;
-            //       printf
+        for (int y = (int)yp1; y <= yp2; ++y)
+        {
+            Uint32 *src = qtex + (int)tx + (tsize - (int)ty) * texture->w;
             *p = *src;
             //      *p = 0xff8080ff;
-            float * table = BilinearTable[(tsize - (int)tx) * 32 / texture->w][((int)ty) * 32 / texture->w];
-            //        float * table = BilinearTable[(tsize - (int) ty) * 32 / texture->w][(int) tx * 32 / texture->w];
-            float alpha = table[0] * alphas[0] + table[1] * alphas[1] + table[2] * alphas[2] + table[3] * alphas[3];
-            LightenPixel(p, (int)alpha);
+
+            if (nConfig::render_shadows)
+            {
+                float * table = BilinearTable[(tsize - (int)tx) * 32 / texture->w][((int)ty) * 32 / texture->w];
+                //        float * table = BilinearTable[(tsize - (int) ty) * 32 / texture->w][(int) tx * 32 / texture->w];
+                float alpha = table[0] * alphas[0] + table[1] * alphas[1] + table[2] * alphas[2] + table[3] * alphas[3];
+                LightenPixel(p, (short)alpha);
+            }
+
             p += 44;
-            tx += m; ty -= m;
+            tx += m;
+            ty -= m;
         }
         yp1 += m1;
         yp2 += m2;
     }
     m1 = (float)(up_point - right_point) / 22.0f;
     m2 = (float)(down_point - right_point) / 22.0f;
-    for (int x = 22; x < 44; x++) {
+    for (short x = 22; x < 44; ++x)
+    {
         float tx = (x - 22) * tfac;
         float ty = (float)(tsize - 1);
 
-        float dy = yp2 - yp1 + 1.0f;
+        const float dy = yp2 - yp1 + 1.0f;
         float m = (ty - tx) / dy;
 
-        Uint32 * p = (Uint32 *)surface->pixels + x + ((int)yp1 - min_y) * 44;
-        for (int y = (int)yp1; y <= (int)yp2; y++) {
-            Uint32 *src = q + (int)tx + (tsize - (int)ty) * texture->w;
+        Uint32 * p = qsurf + x + ((int)yp1 - min_y) * 44;
+        for (int y = (int)yp1; y <= yp2; ++y)
+        {
+            Uint32 *src = qtex + (int)tx + (tsize - (int)ty) * texture->w;
             *p = *src;
             //        *p = 0xff8080ff;
-            float * table = BilinearTable[(tsize - (int)tx) * 32 / texture->w][((int)ty) * 32 / texture->w];
-            float alpha = table[0] * alphas[0] + table[1] * alphas[1] + table[2] * alphas[2] + table[3] * alphas[3];
-            //        float alpha = table[0] * alphas[3] + table[1] * alphas[2] + table[2] * alphas[1] + table[3] * alphas[0];
-            LightenPixel(p, (int)alpha);
+
+            if (nConfig::render_shadows)
+            {
+                float * table = BilinearTable[(tsize - (int)tx) * 32 / texture->w][((int)ty) * 32 / texture->w];
+                float alpha = table[0] * alphas[0] + table[1] * alphas[1] + table[2] * alphas[2] + table[3] * alphas[3];
+                //        float alpha = table[0] * alphas[3] + table[1] * alphas[2] + table[2] * alphas[1] + table[3] * alphas[0];
+                LightenPixel(p, (short)alpha);
+            }            
+
             p += 44;
-            tx += m; ty -= m;
+            tx += m;
+            ty -= m;
         }
         yp1 -= m1;
         yp2 -= m2;
     }
     return surface;
-    /*	int min[2], max[2], q1[2], q2[2], q3[2], q4[2];
-        int i;
-        for (i = 0; i < 2; i++) {
-            min[i] = 1000000; max[i] = -1000000;
-            if (p1[i] < min[i]) min[i] = p1[i];
-            if (p1[i] > max[i]) max[i] = p1[i];
-            if (p2[i] < min[i]) min[i] = p2[i];
-            if (p2[i] > max[i]) max[i] = p2[i];
-            if (p3[i] < min[i]) min[i] = p3[i];
-            if (p3[i] > max[i]) max[i] = p3[i];
-            if (p4[i] < min[i]) min[i] = p4[i];
-            if (p4[i] > max[i]) max[i] = p4[i];
-        }
-        int w = max[0] - min[0] + 2;
-        int h = max[1] - min[1] + 2;
-        if (h > 120) {
-        }
-        SDL_Surface * surface = SDL_CreateRGBSurface(SDL_SWSURFACE , w, h, 32, SDL_BITMASK);
-        for (i = 0; i < 2; i++) {
-            q1[i] = p1[i] - min[i] + 1;
-            q2[i] = p2[i] - min[i] + 1;
-            q3[i] = p3[i] - min[i] + 1;
-            q4[i] = p4[i] - min[i] + 1;
-        }
-        DrawTriangle(surface, q1, q2, q3, texture);
-        DrawTriangle(surface, q3, q4, q1, texture);
-        for (i = 0; i < 2; i++)
-            hotspot[i] = -q1[i];
-        return surface;*/
-    return NULL;
+    /*
+    int min[2], max[2], q1[2], q2[2], q3[2], q4[2];
+    int i;
+    for (i = 0; i < 2; i++)
+    {
+        min[i] = 1000000; max[i] = -1000000;
+        if (p1[i] < min[i]) min[i] = p1[i];
+        if (p1[i] > max[i]) max[i] = p1[i];
+        if (p2[i] < min[i]) min[i] = p2[i];
+        if (p2[i] > max[i]) max[i] = p2[i];
+        if (p3[i] < min[i]) min[i] = p3[i];
+        if (p3[i] > max[i]) max[i] = p3[i];
+        if (p4[i] < min[i]) min[i] = p4[i];
+        if (p4[i] > max[i]) max[i] = p4[i];
+    }
+    int w = max[0] - min[0] + 2;
+    int h = max[1] - min[1] + 2;
+    if (h > 120) {
+    }
+    SDL_Surface * surface = SDL_CreateRGBSurface(0, w, h, 32, SDL_BITMASK);
+    for (unsigned char = 0; i < 2; ++i)
+    {
+        q1[i] = p1[i] - min[i] + 1;
+        q2[i] = p2[i] - min[i] + 1;
+        q3[i] = p3[i] - min[i] + 1;
+        q4[i] = p4[i] - min[i] + 1;
+    }
+    DrawTriangle(surface, q1, q2, q3, texture);
+    DrawTriangle(surface, q3, q4, q1, texture);
+    for (unsigned char = 0; i < 2; ++i)
+        hotspot[i] = -q1[i];
+    return surface;
+    */
 }
 
 
@@ -375,28 +386,28 @@ static void CreateObject(cEntity *object, unsigned int x, unsigned int y,
     object->x = x % 8;
     object->y = y % 8;
     object->z = z;
-    object->blockx = x / 8;
-    object->blocky = y / 8;
     object->tileid = tileid;
     object->hue = 0;
-    if (!skiptiledata && pTileDataLoader) {
+    if (!skiptiledata && pTileDataLoader)
+    {
         struct TileDataStaticEntry entry;
         pTileDataLoader->LoadEntry(tileid, &entry);
         object->height = entry.height;
         object->tiledata_flags = entry.flags;
-        object->tileclass = TILE_CLASS_ITEM;
     }
-    if (pTextureBuffer) {
-        Texture * texture = pTextureBuffer->GetArtTexture(tileid + 0x4000);
-        if (texture) {
+    if (pTextureBuffer)
+    {
+        Texture * texture = pTextureBuffer->GetArtTexture(tileid + TILEDATA_MAX_ID_LAND);
+        if (texture)
+        {
             object->w = texture->GetWidth();
             object->h = texture->GetHeight();
         }
-
     }
 }
 
-static inline void ExtractCell (struct MulCell * cell, Sint8 * heightmap, Uint16 * groundid) {
+static inline void ExtractCell (struct MulCell * cell, Sint8 * heightmap, Uint16 * groundid)
+{
     if (heightmap)
         *heightmap = cell->z;
     if (groundid)
@@ -469,8 +480,6 @@ bool cMapblock::Generate(int blockx, int blocky)
             object->x = yc;
             object->y = xc;
             object->z = heightmap[xc][yc];
-            object->blockx = blockx;
-            object->blocky = blocky;
             object->tileid = groundids[xc][yc];
             object->draw_x = ground_draw_pos[xc][yc][0];
             object->draw_y = ground_draw_pos[xc][yc][1];
@@ -514,24 +523,44 @@ bool cMapblock::Generate(int blockx, int blocky)
 
     for (int istatic = 0; istatic < staticcount; ++istatic)
     {
-        cEntity * object;
-        if (((statics_p->TileID >= 6038) && (statics_p->TileID <= 6066)))
+        /*
+        cEntity tmp;
+        cEntity * object = &tmp;
+        CreateObject(object, x + statics_p->x, y + statics_p->y, statics_p->z, statics_p->TileID);
+        if (object->tiledata_flags & TILEDATAFLAG_WET)
         {
             // Water statics
             object = objects.AddGround();
-            CreateObject(object, x + statics_p->x, y + statics_p->y,
-                statics_p->z, statics_p->TileID, true);
+            *object = tmp;
             object->tileclass = TILE_CLASS_GROUND;
-            object->tileid = statics_p->TileID + 0x4000;
+            object->tileid = statics_p->TileID + TILEDATA_MAX_ID_LAND;
             ((cGroundObject *)object)->stretch = 0;
         }
         else
         {
             object = objects.AddStatic();
-            CreateObject(object, x + statics_p->x, y + statics_p->y,
-                statics_p->z, statics_p->TileID);
+            *object = tmp;
+            object->hue = statics_p->Hue;
+        }*/
+
+        cEntity * object;
+        if (((statics_p->TileID >= 6038) && (statics_p->TileID <= 6066)))
+        {
+            // Water statics
+            object = objects.AddGround();
+            CreateObject(object, x + statics_p->x, y + statics_p->y, statics_p->z, statics_p->TileID, true);
+            object->tileclass = TILE_CLASS_GROUND;
+            object->tileid = statics_p->TileID + TILEDATA_MAX_ID_LAND;
+            cGroundObject * gObj = static_cast<cGroundObject*>(object);
+            gObj->stretch = 0;
+        }
+        else
+        {
+            object = objects.AddStatic();
+            CreateObject(object, x + statics_p->x, y + statics_p->y, statics_p->z, statics_p->TileID);
             object->hue = statics_p->Hue;
         }
+
         int tx = 7-object->y % 8;
         int ty = (object->x % 8);
         int z = (object->z) * 4;
@@ -564,212 +593,144 @@ bool cMapblock::Generate(int blockx, int blocky)
 }
 
 
-void cMapblock::RenderGround(int x, int y, SDL_Surface * target, SDL_Rect * cliprect)
+void cMapblock::RenderType(int type, int x, int y, SDL_Surface * target, SDL_Rect * cliprect)
 {
     if (!pTextureBuffer || !target)
         return;
-    if (((outbox.x + outbox.w + x) < 0) || ((outbox.y + outbox.h + y) < 0) || (outbox.x + x > 1023) || (outbox.y + y > 1023))
+    if (((outbox.x + outbox.w + x) < 0) || ((outbox.y + outbox.h + y) < 0) || (outbox.x + x >= RENDER_CACHE_WIDTH) || (outbox.y + y >= RENDER_CACHE_HEIGHT))
         return;
 
-    int i, j;
     objectlist_t * objectlist = objects.GetList();
-    for (cEntity * object : *objectlist) {
-        if (object->tileclass == TILE_CLASS_GROUND) {
-            cGroundObject * ground = static_cast<cGroundObject *>(object);
-            SDL_Rect rect;
-            SDL_Surface * surface = 0;
-            if (ground->stretch) {
-                i = ground->y;
-                j = ground->x;
-                Texture * texture = pTextureBuffer->GetGroundTexmap(groundids[i][j]);
-                if (texture && texture->GetSurface()) {
-                    int alphas[4];
-                    alphas[0] = (int)alpha_values[i][j];
-                    alphas[1] = (int)alpha_values[i+1][j];
-                    alphas[2] = (int)alpha_values[i][j+1];
-                    alphas[3] = (int)alpha_values[i+1][j+1];
-
-                    int y2 = ground_draw_pos[i][j][1] - ground_draw_pos[i+1][j][1];
-                    int y3 = ground_draw_pos[i+1][j+1][1] - ground_draw_pos[i+1][j][1];
-                    int y4 = ground_draw_pos[i][j+1][1] - ground_draw_pos[i+1][j][1];
-                    int min_y;
-
-                    rect.x = ground_draw_pos[i][j][0] + x;
-                    rect.y = ground_draw_pos[i][j][1] + y;
-                    rect.w = 44;
-                    rect.h = CalcStretchHeight(y2, y3, y4, min_y);
-                    rect.y += -y2 + min_y;
-
-                    bool isOK = true;
-                    if (cliprect)
-                        isOK &= !((rect.x > (cliprect->x + cliprect->w)) || (rect.y > (cliprect->y + cliprect->h)) || (cliprect->x > (rect.x + rect.w)) || (cliprect->y > (rect.y + rect.h)));
-                    if (isOK) {
-                        SDL_Surface * surface = GetStretchedSurface(y2, y3, y4, alphas, texture->GetSurface(), rect.h, min_y);
-                        if (!surface) {
-                            Texture * texture = pTextureBuffer->GetGroundTexture(groundids[i][j]);
-                            if (surface)
-                                surface = texture->GetSurface();
-                        }
-                        if (surface) {
-                            SDL_BlitSurface(surface, NULL, target, &rect);
-                            SDL_FreeSurface(surface);
-                        }
-                    }
-                }
-                else
-                    ground->stretch = false;
-            }
-            if (!ground->stretch) {
-                Texture * texture = NULL;
-                if (ground->tileid >= 0x4000)
-                    texture = pTextureBuffer->GetArtTexture(ground->tileid);
-                else
-                    texture = pTextureBuffer->GetGroundTexture(ground->tileid);
-                if (texture)
-                    surface = texture->GetSurface();
-                rect.x = ground->draw_x + x;
-                rect.y = ground->draw_y + y;
-
-                if (surface) {
-                    rect.w = surface->w;
-                    rect.h = surface->h;
-                    SDL_BlitSurface(surface, NULL, target, &rect);
-                }
-
-            }
-        }
+    for (cEntity * object : *objectlist)
+    {
+        if ((type & TILE_CLASS_GROUND) && (object->tileclass == TILE_CLASS_GROUND))
+            RenderObjectGround(object, x, y, target, cliprect);
+        if ((type & TILE_CLASS_ITEM) && (object->tileclass == TILE_CLASS_ITEM))
+            RenderObjectItem(object, x, y, target, cliprect);
     }
 
     return;
-
-
-    /*	int i, j;
-
-        for (i = 0; i < 8; i++)
-            for (j = 0; j < 8; j++)
-                if (!custom_stretched[i][j]) {
-                Texture * texture = pTextureBuffer->GetGroundTexture(groundids[i][j]);
-                if (texture) {
-                    SDL_Surface * surface = texture->GetSurface();
-                    SDL_Rect rect;
-                    rect.x = ground_draw_pos[i][j][0] + x;
-                    rect.y = ground_draw_pos[i][j][1] + y;
-                    if (surface) {
-                        rect.w = surface->w;
-                        rect.h = surface->h;
-                                        bool clip = false;
-                        if (cliprect)
-                            clip = (rect.x > (cliprect->x + cliprect->w)) || (rect.y > (cliprect->y + cliprect->h)) || (cliprect->x > (rect.x + rect.w)) || (cliprect->y > (rect.y + rect.h));
-                        if (!clip)
-                            SDL_BlitSurface(surface, NULL, target, &rect);
-                    }
-                }
-            }
-            else {
-                    SDL_Rect rect;
-                    rect.x = ground_draw_pos[i][j][0] + x+ hotspots[i][j][0];
-                    rect.y = ground_draw_pos[i][j][1] + y + hotspots[i][j][1];
-                    SDL_Surface * surface = custom_stretched[i][j];
-                    rect.w = surface->w;
-                    rect.h = surface->h;
-                    bool clip = false;
-                SDL_BlitSurface(surface, NULL, target, &rect);
-            } */
 }
 
-void cMapblock::RenderStatics(int x, int y, SDL_Surface * target, SDL_Rect * cliprect, int tile_type)
+void cMapblock::RenderObjectGround(cEntity *object, int x, int y, SDL_Surface * target, SDL_Rect * cliprect)
 {
-    if (!pTextureBuffer || !target)
-        return;
+    int i, j;
+    cGroundObject * ground = static_cast<cGroundObject *>(object);
+    SDL_Rect rect;
+    if (ground->stretch)
+    {
+        i = ground->y;
+        j = ground->x;
+        Texture * texture = pTextureBuffer->GetGroundTexmap(groundids[i][j]);
+        if (texture && texture->GetSurface())
+        {
+            int alphas[4];
+            alphas[0] = (int)alpha_values[i][j];
+            alphas[1] = (int)alpha_values[i+1][j];
+            alphas[2] = (int)alpha_values[i][j+1];
+            alphas[3] = (int)alpha_values[i+1][j+1];
 
-    if (((outbox.x + outbox.w + x) < 0) || ((outbox.y + outbox.h + y) < 0) || (outbox.x + x > 1023) || (outbox.y + y> 1023))
-        return;
+            int y2 = ground_draw_pos[i][j][1] - ground_draw_pos[i+1][j][1];
+            int y3 = ground_draw_pos[i+1][j+1][1] - ground_draw_pos[i+1][j][1];
+            int y4 = ground_draw_pos[i][j+1][1] - ground_draw_pos[i+1][j][1];
+            int min_y;
 
-    objectlist_t * objectlist = objects.GetList();
-    for (cEntity * object : *objectlist) {
-        if (object->tileclass & tile_type) {
-            if (object->tileclass == TILE_CLASS_GROUND) {
-                cGroundObject * ground = static_cast<cGroundObject *>(object);
-                //printf("%i\n",		  ground->tileid);
-                SDL_Rect rect;
-                rect.x = ground->draw_x + x;
-                rect.y = ground->draw_y + y;
+            rect.x = ground_draw_pos[i][j][0] + x;
+            rect.y = ground_draw_pos[i][j][1] + y;
+            rect.w = 44;
+            rect.h = CalcStretchHeight(y2, y3, y4, min_y);
+            rect.y += -y2 + min_y;
 
-                SDL_Surface * surface = NULL;//ground->surface;
-                if (!surface) {
-
-                    Texture * texture;
-                    if (ground->tileid >= 0x4000) {
-                        texture = pTextureBuffer->GetArtTexture(ground->tileid);
-                    }
-                    else
-                        texture = pTextureBuffer->GetGroundTexture(ground->tileid);
-                    if (texture)
+            bool isOK = true;
+            if (cliprect)
+                isOK &= !((rect.x > (cliprect->x + cliprect->w)) || (rect.y > (cliprect->y + cliprect->h)) || (cliprect->x > (rect.x + rect.w)) || (cliprect->y > (rect.y + rect.h)));
+            if (isOK)
+            {
+                SDL_Surface * surface = GetStretchedSurface(y2, y3, y4, alphas, texture->GetSurface(), rect.h, min_y);
+                if (!surface)
+                {
+                    Texture * texture = pTextureBuffer->GetGroundTexture(groundids[i][j]);
+                    if (surface)
                         surface = texture->GetSurface();
                 }
-                else {
-                    rect.x += hotspots[object->y][object->x][0];
-                    rect.y += hotspots[object->y][object->x][1];
-                }
-                if (surface) {
-                    rect.w = surface->w;
-                    rect.h = surface->h;
-                    /*					bool clip = false;
-                                        if (cliprect)
-                                            clip = (rect.x > (cliprect->x + cliprect->w)) || (rect.y > (cliprect->y + cliprect->h)) || (cliprect->x > (rect.x + rect.w)) || (cliprect->y > (rect.y + rect.h));
-                                        if (!clip) */
-                    object->hue = 200;
+                if (surface)
+                {
                     SDL_BlitSurface(surface, NULL, target, &rect);
-
-                }
-            }
-
-            if (object->tileclass == TILE_CLASS_ITEM) {
-                cStaticObject * item = (cStaticObject *)object;
-                /*		int tx = 7-object->y % 8;
-                        int ty = (object->x % 8);
-                        int z =( object->z + heightmap [tx][ty]) * 2; */
-                SDL_Rect rect;
-                /*		rect.x = x + (tx+ty) * 22;
-                        rect.y = y +(ty-tx)*22 - z;*/
-                rect.w = object->w;
-                rect.h = object->h;
-                rect.x = x + object->draw_x;
-                rect.y = y + object->draw_y;
-                bool clip = false;
-                if (cliprect)
-                    clip = (rect.x > (cliprect->x + cliprect->w)) || (rect.y > (cliprect->y + cliprect->h)) || (cliprect->x > (rect.x + rect.w)) || (cliprect->y > (rect.y + rect.h));
-                if (!clip) {
-                    Texture * texture = pTextureBuffer->GetArtTexture(item->tileid + 0x4000);
-                    if (texture) {
-                        SDL_Surface * surface = texture->GetSurface();
-                        if (surface) {
-                            if (!clip) {
-                                if (object->hue > 0) {
-                                    SDL_Surface * hued_surface = CreateHuedSurface(surface, object->hue - 1);
-                                    SDL_BlitSurface(hued_surface, NULL, target, &rect);
-                                    SDL_FreeSurface(hued_surface);
-
-                                }
-                                else
-                                    SDL_BlitSurface(surface, NULL, target, &rect);
-                            }
-                        }
-                    }
-
+                    SDL_FreeSurface(surface);
                 }
             }
         }
+        else
+            ground->stretch = false;
     }
+    if (!ground->stretch)
+    {
+        Texture * texture = NULL;
+        if (ground->tileid >= TILEDATA_MAX_ID_LAND)
+            texture = pTextureBuffer->GetArtTexture(ground->tileid);
+        else
+            texture = pTextureBuffer->GetGroundTexture(ground->tileid);
 
+        SDL_Surface * surface = NULL;
+        if (texture)
+            surface = texture->GetSurface();
 
-
+        rect.x = ground->draw_x + x;
+        rect.y = ground->draw_y + y;
+        if (surface)
+        {
+            rect.w = surface->w;
+            rect.h = surface->h;
+            SDL_BlitSurface(surface, NULL, target, &rect);
+        }
+    }
 }
 
-void cMapblock::GetBounds(INT_Rect * rect, int x, int y)
+void cMapblock::RenderObjectItem(cEntity *object, int x, int y, SDL_Surface * target, SDL_Rect * cliprect)
 {
-    if ((int)outbox.x + x < rect->x) rect->x = (int)outbox.x + x;
-    if ((int)outbox.y + y < rect->y) rect->y = (int)outbox.y + y;
+    cStaticObject * item = (cStaticObject *)object;
+    /*		int tx = 7-object->y % 8;
+            int ty = (object->x % 8);
+            int z =( object->z + heightmap [tx][ty]) * 2; */
+    SDL_Rect rect;
+    /*		rect.x = x + (tx+ty) * 22;
+            rect.y = y +(ty-tx)*22 - z;*/
+    rect.w = object->w;
+    rect.h = object->h;
+    rect.x = x + object->draw_x;
+    rect.y = y + object->draw_y;
+    bool clip = false;
+    if (cliprect)
+        clip = (rect.x > (cliprect->x + cliprect->w)) || (rect.y > (cliprect->y + cliprect->h)) || (cliprect->x > (rect.x + rect.w)) || (cliprect->y > (rect.y + rect.h));
+    if (!clip)
+    {
+        Texture * texture = pTextureBuffer->GetArtTexture(item->tileid + TILEDATA_MAX_ID_LAND);
+        if (texture)
+        {
+            SDL_Surface * surface = texture->GetSurface();
+            if (surface)
+            {
+                if (object->hue > 0)
+                {
+                    SDL_Surface * hued_surface = CreateHuedSurface(surface, object->hue - 1);
+                    SDL_BlitSurface(hued_surface, NULL, target, &rect);
+                    SDL_FreeSurface(hued_surface);
+
+                }
+                else
+                    SDL_BlitSurface(surface, NULL, target, &rect);
+            }
+        }
+
+    }
+}
+
+void cMapblock::GetBounds(INT_Rect * rect, int x, int y) const
+{
+    if ((int)outbox.x + x < rect->x)
+        rect->x = (int)outbox.x + x;
+    if ((int)outbox.y + y < rect->y)
+        rect->y = (int)outbox.y + y;
     if ((int)outbox.x + x + (int)outbox.w > rect->x + rect->w)
         rect->w = (int)outbox.x + x + (int)outbox.w - rect->x;
     if ((int)outbox.y + y + (int)outbox.h > rect->y + rect->h)

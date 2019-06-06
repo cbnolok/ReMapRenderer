@@ -23,55 +23,7 @@
 #ifndef _INCLUDE_H_
 #define _INCLUDE_H_
 
-/*#define MAX_VIEWDISTANCE ( MAX_FOGDISTANCE * MAX_FOGDISTANCE ) */
-/* = FOGDISTANCE ^ 2 */
-
-/* #define MAX_FOGDISTANCE ( MAX_MAPRESOLUTION / 2.0 ) */
-/* = MAPRESOLUTION / 2 */
-
-/* #define MAX_BLOCKRESOLUTION 16
-#define MAX_MAPRESOLUTION MAX_BLOCKRESOLUTION * 8 */
-
-#define NODE_TOLERANCE 0.01
-#define QUADS_PER_NODE 24
-
-#define PI 3.14159f
-
-#define QUADFLAG_BACKFACE 1
-#define QUADFLAG_TRIANGLE 2
-#define QUADFLAG_NEARONLY 4
-
-#define QUADFLAG_CAN_BE_MERGED 4096
-
-#define MODELFLAG_ISGROUND    1
-#define MODELFLAG_TILEABLE    2
-
-// Time in Milliseconds to determine a double click
-#define CLICK_TIME 300
-
-#define	MSL	512
-
-#define WALK_BUFFER 50
-#define WALK_INTERVAL 20
-
-
-#define PICK_BUFSIZE 256
-
-// Win32 related
-#ifdef	WIN32
-#define strcasecmp	strcmpi
-#endif
-
-extern int BLOCKRESOLUTION;
-extern int MAPRESOLUTION;
-extern int FOGDISTANCE;
-extern int VIEWDISTANCE;
-
-#define GAMESTATE_MENU  0
-#define GAMESTATE_GAME  1
-
-#define ROOF_NONE 1000
-#define ROOF_WAIT 1001
+extern int texture_mem;
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     #define SDL_RMASK 0xff000000
@@ -90,8 +42,5 @@ extern int VIEWDISTANCE;
 
 #define SDL_RGB_16_BITMASK 0x7C00, 0x3E0, 0x1F, 0
 #define SDL_RGBA_16_BITMASK 0x7C00, 0x3E0, 0x1F, 0x8000
-
-extern int texture_mem;
-
 
 #endif //_INCLUDE_H_

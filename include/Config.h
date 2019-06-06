@@ -5,9 +5,9 @@
 #define RENDER_CACHE_WIDTH 1024
 #define RENDER_CACHE_HEIGHT 1024
 
-extern int tiledataMaxID;
+extern unsigned int tiledataMaxID;
 
-namespace	nConfig
+namespace nConfig
 {
 	// UO
     extern int mapindex;
@@ -16,6 +16,8 @@ namespace	nConfig
 	extern int minblockx, maxblockx, minblocky, maxblocky;
 	extern int minx, maxx, miny, maxy;
 	extern int detail;
+    extern int render_shadows;
+    extern int render_underground;
 	extern int cache_art, cache_texture, cache_ground;
 	extern int cache_block;
 	extern std::string output;

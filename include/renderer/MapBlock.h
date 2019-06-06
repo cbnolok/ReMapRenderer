@@ -24,9 +24,7 @@
 #define _MAPBLOCK_H_
 
 #include "SDL/SDL.h"
-
 #include "StaticObjects.h"
-#include "Node.h"
 
 struct INT_Rect {
     int x, y, w, h;
@@ -44,19 +42,20 @@ private:
     float alpha_values[9][9];
 
     SDL_Rect outbox;
-
     StaticObjectList objects;
+
+    void RenderObjectGround(cEntity *obj, int x, int y, SDL_Surface * target, SDL_Rect * cliprect);
+    void RenderObjectItem(cEntity *obj, int x, int y, SDL_Surface * target, SDL_Rect * cliprect);
 
 public:
     cMapblock ();
     ~cMapblock ();
     bool Generate(int blockx, int blocky);
-    void RenderGround(int x, int y, SDL_Surface * target, SDL_Rect * cliprect = NULL);
-    void RenderStatics(int x, int y, SDL_Surface * target, SDL_Rect * cliprect = NULL, int tile_type = TILE_CLASS_ALL);
+    void RenderType(int type, int x, int y, SDL_Surface * target, SDL_Rect * cliprect = NULL);
 
     int blockx, blocky;
 
-    void GetBounds(INT_Rect * rect, int x, int y);
+    void GetBounds(INT_Rect * rect, int x, int y) const;
 };
 
 

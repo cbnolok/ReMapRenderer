@@ -4,8 +4,9 @@
 //
 
 #include <iostream>
+#include "SDL/SDL.h"
 #include "renderer/SDLScreen.h"
-#include "Config.h"
+#include "include.h"
 
 
 int texture_mem = 0;
@@ -29,8 +30,6 @@ static void CalcBilinearTable ()
 
 SDLScreen::SDLScreen()
 {
-    act_alpha = 255;
-    light_factor = 1.0f;
     screen = NULL;
     CalcBilinearTable();
 }
@@ -42,7 +41,7 @@ SDLScreen::~SDLScreen()
     SDL_Quit();
 }
 
-int SDLScreen::Init(int width, int height, int bpp)
+int SDLScreen::Init(int width, int height)
 {
     /* initialize SDL */
     SDL_Init(SDL_INIT_VIDEO);

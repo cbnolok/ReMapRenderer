@@ -18,8 +18,8 @@ struct ParserData
 };
 
 
-namespace nConfig {
-
+namespace nConfig
+{
     // UO related
     int mapindex = 0;
     int widthblocks = 768;
@@ -39,13 +39,15 @@ namespace nConfig {
     int maxx = 1900;
     int maxy = 2680;
 
+    int detail = 0;
+    int render_shadows = 1;
+    int render_underground = 0;
+
     // maximum number of elements in the cache
     int cache_art     = 500;  // art tile SDL texture
     int cache_texture = 300;  // ground tile SDL texture
     int cache_ground  = 1000; // ground texmaps
     int cache_block = 150;    // map blocks
-
-    int detail = 0;
 }
 
 using namespace nConfig;
@@ -66,6 +68,8 @@ ParserData ParserInfo[] =
     ParserData("OUTPUT", IS_STRING , &output),
     ParserData("PATCHES", IS_STRING , &patches),
     ParserData("DETAIL", IS_INTEGER , &detail),
+    ParserData("RENDER_SHADOWS", IS_INTEGER , &render_shadows),
+    ParserData("RENDER_UNDERGROUND", IS_INTEGER , &render_underground),
     ParserData("CACHE_ART", IS_INTEGER , &cache_art),
     ParserData("CACHE_TEXTURE", IS_INTEGER , &cache_texture),
     ParserData("CACHE_GROUND", IS_INTEGER , &cache_ground),

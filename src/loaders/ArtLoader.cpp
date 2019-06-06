@@ -3,6 +3,7 @@
 // Created by: Alexander Oster - tensor@ultima-iris.de
 //
 
+#include "SDL/SDL.h"
 #include "loaders/ArtLoader.h"
 #include "loaders/VerdataLoader.h"
 #include "Debug.h"
@@ -56,8 +57,8 @@ cArtLoader::cArtLoader (std::string filename, std::string indexname)
     }
 
     artindex->seekg(0, ios::end);
-    unsigned long idxE = artindex->tellg();
-    art_count = idxE / 12;
+    size_t idxE = artindex->tellg();
+    art_count = (unsigned int)(idxE / 12);
 }
 
 cArtLoader::~cArtLoader ()
@@ -71,7 +72,7 @@ Texture * cArtLoader::LoadArt(int index)
     if ((index < 0) || ((unsigned int)index >= art_count))
         return NULL;
 
-    if (index < 0x4000)
+    if (index < TILEDATA_MAX_ID_LAND)
         return LoadGroundArt(index);
 
     return LoadStaticArt(index);
@@ -80,7 +81,7 @@ Texture * cArtLoader::LoadArt(int index)
 
 Texture * cArtLoader::LoadGroundArt(int index)
 {
-    if ((index < 0) || ((unsigned int)index >= 0x4000))
+    if ((index < 0) || ((unsigned int)index >= TILEDATA_MAX_ID_LAND))
         return NULL;
 
     struct sPatchResult patch;
@@ -190,7 +191,7 @@ Texture * cArtLoader::LoadGroundArt(int index)
 
 Texture * cArtLoader::LoadStaticArt(int index)
 {
-    if ((index < 0x4000) || ((unsigned int)index >= art_count))
+    if ((index < TILEDATA_MAX_ID_LAND) || ((unsigned int)index >= art_count))
         return NULL;
 
     struct sPatchResult patch;
@@ -215,7 +216,6 @@ Texture * cArtLoader::LoadStaticArt(int index)
 
     Uint8 * filedata = new Uint8[idx.length];
     Uint8 * filep = filedata;
-    Uint8 * eof = filedata + idx.length;
 
     int header;
     Uint16 width, height;
@@ -265,7 +265,7 @@ Texture * cArtLoader::LoadStaticArt(int index)
     }
 
     //  Texture * texture = new Texture;
-    //  texture->LoadFromData16(data, width, height, 16);
+    //  texture->LoadFromData(data, width, height, 16);
 
     //  delete lookuptable;
       //delete data;

@@ -23,11 +23,6 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include "SDL/SDL.h"
 #include "renderer/Renderer.h"
 
 class Game

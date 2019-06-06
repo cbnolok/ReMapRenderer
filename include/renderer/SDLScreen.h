@@ -23,22 +23,17 @@
 #ifndef _SDLSCREEN_H_
 #define _SDLSCREEN_H_
 
-#include "SDL/SDL.h"
+struct SDL_Surface;
 
 using namespace std;
 
 class SDLScreen
 {
-private:
-  Uint8 act_alpha;
-  
-  float light_factor;
-
 public:
     SDLScreen ();
    ~SDLScreen ();
 
-  int Init (int width, int height, int bpp);
+  int Init (int width, int height);
   SDL_Surface *screen;
 };
 

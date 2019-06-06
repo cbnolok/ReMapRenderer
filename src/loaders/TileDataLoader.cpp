@@ -11,7 +11,7 @@
 using namespace std;
 
 cTileDataLoader * pTileDataLoader = NULL;
-int tiledataMaxID = 0;
+unsigned int tiledataMaxID = 0;
 
 cTileDataLoader::cTileDataLoader (std::string filename)
 {
@@ -40,7 +40,7 @@ cTileDataLoader::cTileDataLoader (std::string filename)
     if (filesize >= 3188736)
         highseas = true;
 
-    tiledataMaxID = highseas ? 0x7FFFF : 0xC0000;
+    tiledataMaxID = TILEDATA_MAX_ID_LAND + (highseas ? TILEDATA_MAX_ID_STATIC_HS : TILEDATA_MAX_ID_STATIC_PREHS);
 }
 
 cTileDataLoader::~cTileDataLoader ()
@@ -57,7 +57,7 @@ bool cTileDataLoader::LoadEntry (unsigned int index, struct TileDataStaticEntry 
 
     static const unsigned terrain_entrysize = highseas ? 30 : 26;
     static const unsigned terrain_groupsize = 4 + (entries_per_group * terrain_entrysize);
-    static const unsigned terrain_sectionsize = ((0x4000 / entries_per_group) * terrain_groupsize) + ((0x4000 % entries_per_group) * terrain_entrysize);
+    static const unsigned terrain_sectionsize = ((TILEDATA_MAX_ID_LAND / entries_per_group) * terrain_groupsize) + ((TILEDATA_MAX_ID_LAND % entries_per_group) * terrain_entrysize);
 
     static const unsigned static_entrysize = highseas ? sizeof(TileDataStaticEntry) : sizeof(TileDataStaticEntry_PreHS); // 41 : 37
     static const unsigned static_groupsize = 4 + (entries_per_group *  static_entrysize);

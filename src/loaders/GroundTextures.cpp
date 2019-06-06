@@ -5,6 +5,7 @@
 
 #include <cstring>
 #include <iostream>
+#include "SDL/SDL.h"
 #include "loaders/GroundTextures.h"
 #include "Debug.h"
 #include "uotype.h"
@@ -56,8 +57,8 @@ cGroundTextureLoader::cGroundTextureLoader (std::string filename, std::string in
     }
 
     texmapsindex->seekg(0, ios::end);
-    unsigned long idxE = texmapsindex->tellg();
-    groundtex_count = idxE / 12;
+    size_t idxE = texmapsindex->tellg();
+    groundtex_count = (unsigned int)(idxE / 12);
 }
 
 cGroundTextureLoader::~cGroundTextureLoader ()

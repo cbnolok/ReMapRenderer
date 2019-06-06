@@ -85,7 +85,7 @@ public:
 		}
 	}
 
-	void setAutofree( bool data ) { _autofree = true; }
+	void setAutofree( bool data ) { _autofree = data; }
 	bool autofree() const { return _autofree; }
 };
 

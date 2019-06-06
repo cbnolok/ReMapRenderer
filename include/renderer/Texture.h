@@ -23,13 +23,9 @@
 #ifndef _TEXTURE_H_
 #define _TEXTURE_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include "SDL/SDL.h"
-
 #include "../Buffer.h"
+
+struct SDL_Surface;
 
 class Texture : public BufferEntry
 {
@@ -42,7 +38,6 @@ public:
    ~Texture ();
 
    int LoadFromData( void * data, int width, int height, int bits_per_pixel);
-   int LoadFromData16( void * data, int width, int height, int bits_per_pixel);
    int LoadFromFile( const char * filename);
    int Create16(int width, int height);
 
@@ -51,9 +46,6 @@ public:
    
    SDL_Surface * GetSurface () { return _surface; }
    unsigned int GetId() {return _id;}
-   
-protected:
-
 };
 
 

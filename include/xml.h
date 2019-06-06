@@ -111,7 +111,7 @@ namespace XML
 		Node() {}
 		virtual ~Node();
 
-		int addNode( Node *node );
+		unsigned int addNode( Node *node );
 		bool hasNode( const std::string &name ) const;
 		void removeNode( unsigned int index );
 		void removeNode( Node *node );
@@ -122,7 +122,7 @@ namespace XML
 		bool lookupAttribute( const std::string &name, int &data ) const;
 		bool lookupAttribute( const std::string &name, std::string &data ) const;
 
-		unsigned int getNodeCount() const { return nodes.size(); }
+		unsigned int getNodeCount() const { return (unsigned)nodes.size(); }
 		Node *getNode( unsigned int index ) const;
 		unsigned int getTotalNodeCount() const;
 		

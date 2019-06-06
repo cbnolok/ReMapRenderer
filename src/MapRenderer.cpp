@@ -20,7 +20,7 @@ SDLScreen *SDLscreen;
 extern "C" // needed by SDL
 int main(int argc, char *argv[])
 {
-    printf("(Re)MapRenderer v2.0 (%zu bits build).\n", (sizeof(void*) * 8));
+    printf("(Re)MapRenderer v2.1 (%zu bits build).\n", (sizeof(void*) * 8));
 
     if (!nConfig::Init()) {
         pDebug.Log("Unable to load configuration file - Using defaults ", __FILE__, __LINE__,
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     const int rc_width = RENDER_CACHE_WIDTH;
     const int rc_height = RENDER_CACHE_HEIGHT;
 
-    SDLscreen->Init(rc_width, rc_height, 32);
+    SDLscreen->Init(rc_width, rc_height);
 
     // 24 bpp uncompressed bitmap
     Uint8 bmpheader[54] ={
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
     const size_t t_pixels = (size_t)(*bmpwidth) * (*bmpheight);
     const size_t realmem = sizeof(bmpheader) + (t_pixels * 3);  // * 3 -> a pixel has a byte for R, for G, for B
-    printf("Creating Bitmap file (%u x %u): %zu bytes (Zoom 1/%i)...", (*bmpwidth), (*bmpheight), realmem, divisor);
+    printf("Creating output Bitmap file (%u x %u): %zu bytes (Zoom 1/%i)...", (*bmpwidth), (*bmpheight), realmem, divisor);
 
     Uint8 * data = (Uint8 *)malloc (rc_width * rc_height * 3);
     memset(data, 0, rc_width * rc_height * 3);
@@ -179,7 +179,7 @@ goto_end:
 
     if (argc)
     {
-        printf("Press a key to exit...\n.");
+        printf("Press a key to exit...\n");
         getchar();
     }
 

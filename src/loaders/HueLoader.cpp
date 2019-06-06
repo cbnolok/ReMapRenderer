@@ -25,13 +25,14 @@ bool cHueLoader::load(std::string filename)
         return false;
     }
 
-    unsigned int i = 0;
+    unsigned short i = 0;
 
     // Read as many fonts as we can
-    while (huefile.good()) {
+    while (huefile.good())
+    {
         huefile.seekg(4, std::ios::cur);
 
-        for (unsigned int j = 0; j < 8; ++j) {
+        for (unsigned short j = 0; j < 8; ++j) {
             unsigned short hueId = i * 8 + j;
 
             stHue hue;
@@ -61,8 +62,7 @@ bool cHueLoader::load(std::string filename)
             huefile.seekg(20, std::ios::cur);
         }
 
-        i++;
-
+        ++i;
     }
 
     huefile.close();

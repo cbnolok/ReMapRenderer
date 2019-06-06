@@ -31,9 +31,9 @@ namespace XML {
             delete nodes[i];
     };
 
-    int Node::addNode(Node *node) {
+    unsigned int Node::addNode(Node *node) {
         nodes.push_back(node);
-        return nodes.size() - 1;
+        return unsigned(nodes.size() - 1);
     }
 
     // Search for the node
@@ -217,7 +217,6 @@ namespace XML {
             return false;
 
         std::string comment;
-        bool completed = false;
         // *at least* one char
         readChar(false);
 
@@ -243,7 +242,7 @@ namespace XML {
         } while (foundContent);
     }
 
-    void Parser::parseDocType(Node *node)
+    void Parser::parseDocType(Node * /*node*/ )
     {
         if (!doesStreamMatchString("<!DOCTYPE"))
             return;
@@ -616,16 +615,16 @@ namespace XML {
         if (!fp)
             throw "Couldn't open file.";
 
-        fseek(fp, 0, SEEK_END);
-        unsigned int size = ftell(fp);
-        fseek(fp, 0, SEEK_SET);
+        //fseek(fp, 0, SEEK_END);
+        //unsigned int size = ftell(fp);
+        //fseek(fp, 0, SEEK_SET);
 
         char buffer[1025];
         std::string result;
 
         while (!feof(fp))
         {
-            int bytesRead = fread(buffer, 1, 1024, fp);
+            size_t bytesRead = fread(buffer, 1, 1024, fp);
             buffer[bytesRead] = 0;
             result += buffer;
         }

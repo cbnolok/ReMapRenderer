@@ -23,11 +23,6 @@
 #ifndef _BUFFER_H_
 #define _BUFFER_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include "SDL/SDL.h"
 
 class BufferEntry
 {
@@ -41,6 +36,7 @@ class Buffer
 private:
    BufferEntry * * bufferarray;
    int size;
+
 public:
     Buffer ();
    virtual ~Buffer ();
@@ -54,8 +50,6 @@ public:
    virtual void Delete(int index);
 
    BufferEntry * Get(int index);
-
-protected:
 };
 
 

@@ -25,12 +25,8 @@
 
 #include <vector>
 
-
-#define TILE_CLASS_GROUND    1
-#define TILE_CLASS_ITEM      2
-#define TILE_CLASS_CHARACTER 4
-
-#define TILE_CLASS_ALL       15
+#define TILE_CLASS_GROUND    01
+#define TILE_CLASS_ITEM      02
 
 struct TDStaticFlag
 {
@@ -76,7 +72,6 @@ class cEntity {
 public:
     int tileclass;
     int x, y, z;
-    int blockx, blocky;
     int w, h;
     int draw_x, draw_y;
     int tileid;
@@ -91,9 +86,7 @@ public:
 class cStaticObject: public cEntity
 {
 public:
-    cStaticObject () {
-        id = 0;
-    }
+    cStaticObject ();
     virtual ~cStaticObject () { };
 };
 

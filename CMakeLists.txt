@@ -27,15 +27,18 @@ source_group(include\\loaders FILES ${SF_INCLUDE_LOADERS})
 set(SF_INCLUDE_RENDERER 
     include/renderer/MapBlock.h
     include/renderer/MapBuffer.h
-    include/renderer/Node.h
     include/renderer/Renderer.h
     include/renderer/SDLScreen.h
     include/renderer/StaticObjects.h
     include/renderer/Texture.h
     include/renderer/TextureBuffer.h
-    include/renderer/World.h
 )
 source_group(include\\renderer FILES ${SF_INCLUDE_RENDERER})
+
+set (SF_RESOURCES
+    resources//MapRenderer.rc
+)
+source_group(resources FILES ${SF_RESOURCES})
 
 set(SF_BASE 
     src/Buffer.cpp
@@ -59,7 +62,6 @@ source_group(src\\loaders FILES ${SF_LOADERS})
 set(SF_RENDERER
     src/renderer/MapBlock.cpp
     src/renderer/MapBuffer.cpp
-    src/renderer/Node.cpp
     src/renderer/Renderer.cpp
     src/renderer/SDLScreen.cpp
     src/renderer/StaticObjects.cpp
@@ -95,9 +97,9 @@ include_directories("${CMAKE_SOURCE_DIR}/include/" "${CMAKE_SOURCE_DIR}/include_
 
 set(CMAKE_CXX_STANDARD 11) # c++11
 add_executable(ReMapRenderer 
-    resources/MapRenderer.rc 
     ${SF_INCLUDE_BASE} ${SF_INCLUDE_LOADERS} ${SF_INCLUDE_RENDERER} 
     ${SF_BASE} ${SF_LOADERS} ${SF_RENDERER}
+    ${SF_RESOURCES}
 )
 
 target_link_libraries(ReMapRenderer SDL2main SDL2)
@@ -106,7 +108,7 @@ if (WIN32)
 endif (WIN32)
 
 if (MSVC)
-    set (CMAKE_CXX_FLAGS "/O2 /EHsc /Oy /Oi /MP")
+    set (CMAKE_CXX_FLAGS "/O2 /EHsc /MP /Oy /fp:fast")
 else (MSVC)
-    set(CMAKE_CXX_FLAGS "-s -O3 -fomit-frame-pointer")
+    set(CMAKE_CXX_FLAGS "-s -O3 -fomit-frame-pointer -ffast-math")
 endif(MSVC)

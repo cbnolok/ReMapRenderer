@@ -199,7 +199,6 @@ unsigned int UOMapLoader::AddObject(unsigned int x, unsigned int y, int z, unsig
     if (!patches)
         return 0;
 
-
     struct StaticPatch patch;
     memset(&patch, 0, sizeof (patch));
     patch.type = PATCH_ADD;
@@ -229,9 +228,7 @@ unsigned int UOMapLoader::DelObject(unsigned int blockx, unsigned int blocky, un
     staidxstream->seekg((blockx * height + blocky) * 12, ios::beg);
     staidxstream->read((char *)&block, 12);
 
-
-    int len = block.length / 7;
-
+    unsigned int len = block.length / 7;
     if (block.length == 0xffffffff)
         len = 0;
 

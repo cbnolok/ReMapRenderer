@@ -6,6 +6,7 @@
 #include "renderer/TextureBuffer.h"
 #include "loaders/GroundTextures.h"
 #include "loaders/ArtLoader.h"
+#include "uotype.h"
 #include "Debug.h"
 #include "Config.h"
 
@@ -29,10 +30,9 @@ TextureBuffer::~TextureBuffer()
 {
 }
 
-Texture *TextureBuffer::GetGroundTexture(int index)
+Texture *TextureBuffer::GetGroundTexture(unsigned int index)
 {
-
-    if ((index < 0) || (index >= 0x4000))
+    if ((index < 0) || (index >= TILEDATA_MAX_ID_LAND))
         return NULL;
 
     Texture * result = groundTiles.findEntry(index);
@@ -57,9 +57,9 @@ Texture *TextureBuffer::GetGroundTexture(int index)
     return result;
 }
 
-Texture *TextureBuffer::GetArtTexture(int index)
+Texture *TextureBuffer::GetArtTexture(unsigned int index)
 {
-    if ((index < 0x4000) && (index >= 0))
+    if ((index < TILEDATA_MAX_ID_LAND) && (index >= 0))
         return GetGroundTexture(index);
 
     if ((index < 0x0) || (index >= tiledataMaxID))
@@ -84,10 +84,9 @@ Texture *TextureBuffer::GetArtTexture(int index)
     return result;
 }
 
-Texture *TextureBuffer::GetGroundTexmap(int index)
+Texture *TextureBuffer::GetGroundTexmap(unsigned int index)
 {
-
-    if ((index < 0) || (index >= 0x4000))
+    if ((index < 0) || (index >= TILEDATA_MAX_ID_LAND))
         return NULL;
 
     Texture * result = groundTexmaps.findEntry(index);

@@ -4,9 +4,10 @@
 //
 
 #include <iostream>
+#include "SDL/SDL.h"
+#include "include.h"
 #include "renderer/Texture.h"
 #include "Debug.h"
-#include "include.h"
 
 using namespace std;
 
@@ -22,7 +23,6 @@ Texture::~Texture ()
         SDL_FreeSurface(_surface);
     }
 }
-
 
 int Texture::LoadFromData(void * data, int width, int height, int bits_per_pixel)
 {
@@ -74,31 +74,6 @@ int Texture::Create16(int width, int height)
     return (true);
 }
 
-int Texture::LoadFromData16(void * data, int width, int height, int bits_per_pixel)
-{
-    if (_surface)
-        SDL_FreeSurface(_surface);
-
-    _surface = NULL;
-
-    /* SDL interprets each pixel as a 32-bit number, so our masks must depend
-         on the endianness (byte order) of the machine */
-
-         //  _surface = SDL_CreateRGBSurface&*From(data, width, height, bits_per_pixel, pitch, rmask, gmask, bmask, amask);
-    _surface = SDL_CreateRGBSurface(0, width, height, 16, SDL_RGB_16_BITMASK);
-    SDL_SetColorKey(_surface, SDL_TRUE, 0);
-    texture_mem += _surface->w * _surface->h * 2;
-
-    if (!_surface) {
-        pDebug.Log("Out of Memory in Texture::LoadFromData ()", __FILE__, __LINE__, LEVEL_ERROR);
-        return false;
-    }
-    memcpy (_surface->pixels, data, width* height * 2);
-
-
-    return (true);
-}
-
 int Texture::LoadFromFile(const char * filename)
 {
     if (_surface)
@@ -123,7 +98,6 @@ int Texture::GetHeight(void)
         return 0;
     return _surface->h;
 }
-
 
 int Texture::GetWidth(void)
 {

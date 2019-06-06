@@ -32,9 +32,9 @@ public:
    TextureBuffer ();
    virtual ~TextureBuffer ();
 
-   Texture * GetGroundTexture(int index);
-   Texture * GetArtTexture(int index);
-   Texture * GetGroundTexmap(int index);
+   Texture * GetGroundTexture(unsigned int index);
+   Texture * GetArtTexture(unsigned int index);
+   Texture * GetGroundTexmap(unsigned int index);
 
 protected:
 	Cache< Texture > groundTiles;

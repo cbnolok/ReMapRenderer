@@ -23,25 +23,16 @@
 #ifndef _RENDERER_H_
 #define _RENDERER_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
 #include "MapBlock.h"
 #include "Texture.h"
 
 #include <string>
 #include <vector>
 
-#include "SDL/SDL.h"
 #include "Texture.h"
 
 class Renderer
-{
-private:
-	void RenderTerrain (SDL_Surface * target, int mx, int my);
-	void RenderStatics (SDL_Surface * target, int mx, int my);
-		
+{	
 public:
    Renderer ();
    virtual ~Renderer ();

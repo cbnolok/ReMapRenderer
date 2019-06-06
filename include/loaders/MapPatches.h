@@ -23,18 +23,11 @@
 #ifndef _MAPPATCHES_H_
 #define _MAPPATCHES_H_
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include "SDL/SDL.h"
 #include "../uotype.h"
 
 
 class UOMapPatches
 {
-private:
-
 public:
 
    virtual void AddPatch(struct StaticPatch patch) = 0;
@@ -43,7 +36,6 @@ public:
    
    virtual int GetNewStaticSize(int orig_count, unsigned int blockx, unsigned int blocky, bool &apply_needed) = 0;
    virtual void ApplyPatch(unsigned int blockx, unsigned int blocky, unsigned int oldcount, unsigned int newcount, struct staticinfo * src, struct staticinfo * dst) = 0;
-
 };
 
 
