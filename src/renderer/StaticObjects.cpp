@@ -67,15 +67,13 @@ static inline bool TestObject (const cEntity * object1, const cEntity * object2)
 
     if (object1->z != object2->z)
         return (object1->z < object2->z);
-    if (!nConfig::render_underground)
-    {
-        if (object1->tileclass != object2->tileclass)
-            return (object1->tileclass < object2->tileclass);
-    }
 
     if (DIFFERENT_TF(TDStaticFlag::Foliage))
         return TF_1BELOW(TDStaticFlag::Foliage);
-
+    /*if (DIFFERENT_TF(TDStaticFlag::Background))
+        return !TF_1BELOW(TDStaticFlag::Background);
+    if (DIFFERENT_TF(TDStaticFlag::Surface))
+        return !TF_1BELOW(TDStaticFlag::Surface);*/
     if (object1->height != object2->height)
         return (object1->height < object2->height);
 

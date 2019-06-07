@@ -7,10 +7,11 @@
 
 #include <string>
 
-#define LEVEL_WARNING  0
-#define LEVEL_ERROR    1
-#define LEVEL_CRITICAL 2
-#define LEVEL_NONE     3
+#define LEVEL_MSG       0
+#define LEVEL_WARNING   1
+#define LEVEL_ERROR     2
+#define LEVEL_CRITICAL  3
+#define LEVEL_NONE      4
 
 class Debug
 {
@@ -22,7 +23,7 @@ public:
     ~Debug ();
 
     void Log(const char * message, char * filename, int line, int level);
-    void Log(const char * message);
+    void Log(const char * message, int level = LEVEL_MSG);
     void Log(std::string const& message) { Log (message.c_str()); }
     int GetLoglevel(void);
     void SetLoglevel(int loglevel);

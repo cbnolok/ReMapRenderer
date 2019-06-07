@@ -20,7 +20,7 @@ SDLScreen *SDLscreen;
 extern "C" // needed by SDL
 int main(int argc, char *argv[])
 {
-    printf("(Re)MapRenderer v2.1 (%zu bits build).\n", (sizeof(void*) * 8));
+    printf("(Re)MapRenderer v2.1.1 (%zu bits build).\n", (sizeof(void*) * 8));
 
     if (!nConfig::Init()) {
         pDebug.Log("Unable to load configuration file - Using defaults ", __FILE__, __LINE__,

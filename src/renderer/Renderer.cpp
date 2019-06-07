@@ -29,60 +29,38 @@ Renderer::~Renderer()
 
 void Renderer::Rebuild (int mx, int my)
 {
-    if (nConfig::render_underground)
-    {
-        for (int x = nConfig::minblockx; x <= nConfig::maxblockx; x++)
-            for (int y = nConfig::minblocky; y <= nConfig::maxblocky; y++)
-            {
-                int tx = x - nConfig::minblockx;
-                int ty = nConfig::maxblocky - y;
+    for (int x = nConfig::minblockx; x <= nConfig::maxblockx; x++)
+        for (int y = nConfig::minblocky; y <= nConfig::maxblocky; y++)
+        {
+            int tx = x - nConfig::minblockx;
+            int ty = nConfig::maxblocky - y;
 
-                int dx = (tx+ty)*176 + hotspotx + mx;
-                int dy = (tx-ty)*176 + hotspoty + my;
+            int dx = (tx+ty)*176 + hotspotx + mx;
+            int dy = (tx-ty)*176 + hotspoty + my;
 
-                if (!((dx > RENDER_CACHE_WIDTH * 2) || (dx < -RENDER_CACHE_WIDTH * 2) || (dy > RENDER_CACHE_HEIGHT * 2) || (dy < -RENDER_CACHE_HEIGHT * 2))) {
+            if (!((dx > RENDER_CACHE_WIDTH * 2) || (dx < -RENDER_CACHE_WIDTH * 2) || (dy > RENDER_CACHE_HEIGHT * 2) || (dy < -RENDER_CACHE_HEIGHT * 2))) {
 
-                    cMapblock * block = pMapbuffer->CreateBlock(x, y);
-                    if (block)
-                        block->RenderType(TILE_CLASS_GROUND, dx, dy, SDLscreen->screen, NULL);
-                }
+                cMapblock * block = pMapbuffer->CreateBlock(x, y);
+                if (block)
+                    block->RenderType(TILE_CLASS_GROUND, dx, dy, SDLscreen->screen, NULL);
             }
-        for (int x = nConfig::minblockx; x <= nConfig::maxblockx; x++)
-            for (int y = nConfig::minblocky; y <= nConfig::maxblocky; y++)
-            {
-                int tx = x - nConfig::minblockx;
-                int ty = nConfig::maxblocky - y;
+        }
+    for (int x = nConfig::minblockx; x <= nConfig::maxblockx; x++)
+        for (int y = nConfig::minblocky; y <= nConfig::maxblocky; y++)
+        {
+            int tx = x - nConfig::minblockx;
+            int ty = nConfig::maxblocky - y;
 
-                int dx = (tx+ty)*176 + hotspotx + mx;
-                int dy = (tx-ty)*176 + hotspoty + my;
+            int dx = (tx+ty)*176 + hotspotx + mx;
+            int dy = (tx-ty)*176 + hotspoty + my;
 
-                if (!((dx > RENDER_CACHE_WIDTH * 2) || (dx < -RENDER_CACHE_WIDTH * 2) || (dy > RENDER_CACHE_HEIGHT * 2) || (dy < -RENDER_CACHE_HEIGHT * 2))) {
+            if (!((dx > RENDER_CACHE_WIDTH * 2) || (dx < -RENDER_CACHE_WIDTH * 2) || (dy > RENDER_CACHE_HEIGHT * 2) || (dy < -RENDER_CACHE_HEIGHT * 2))) {
 
-                    cMapblock * block = pMapbuffer->CreateBlock(x, y);
-                    if (block)
-                        block->RenderType(TILE_CLASS_ITEM, dx, dy, SDLscreen->screen, NULL);
-                }
+                cMapblock * block = pMapbuffer->CreateBlock(x, y);
+                if (block)
+                    block->RenderType(TILE_CLASS_ITEM, dx, dy, SDLscreen->screen, NULL);
             }
-    }
-    else
-    {
-        for (int x = nConfig::minblockx; x <= nConfig::maxblockx; x++)
-            for (int y = nConfig::minblocky; y <= nConfig::maxblocky; y++)
-            {
-                int tx = x - nConfig::minblockx;
-                int ty = nConfig::maxblocky - y;
-
-                int dx = (tx+ty)*176 + hotspotx + mx;
-                int dy = (tx-ty)*176 + hotspoty + my;
-
-                if (!((dx > RENDER_CACHE_WIDTH * 2) || (dx < -RENDER_CACHE_WIDTH * 2) || (dy > RENDER_CACHE_HEIGHT * 2) || (dy < -RENDER_CACHE_HEIGHT * 2))) {
-
-                    cMapblock * block = pMapbuffer->CreateBlock(x, y);
-                    if (block)
-                        block->RenderType(TILE_CLASS_GROUND|TILE_CLASS_ITEM, dx, dy, SDLscreen->screen, NULL);
-                }
-            }
-    }
+        }
 }
 
 INT_Rect Renderer::CalcRenderBox()
